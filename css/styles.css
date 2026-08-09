@@ -704,6 +704,58 @@ a {
   pointer-events: none;
 }
 
+/* Mute toggle — video starts muted and stays that way until clicked, since
+   hover alone isn't a strong enough browser permission for audio (Safari/
+   iOS especially). Hidden until the card is actually playing, so it's not
+   clutter on the static thumbnail. */
+.project-mute-toggle {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 3;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.project-card.is-playing .project-mute-toggle {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.project-mute-toggle:hover {
+  background: rgba(188, 208, 68, 0.85);
+  border-color: rgba(188, 208, 68, 0.85);
+  color: #000000;
+}
+
+.project-mute-toggle svg {
+  width: 17px;
+  height: 17px;
+}
+
+.project-mute-toggle .icon-unmuted {
+  display: none;
+}
+
+.project-mute-toggle[aria-pressed="true"] .icon-muted {
+  display: none;
+}
+
+.project-mute-toggle[aria-pressed="true"] .icon-unmuted {
+  display: block;
+}
+
 .project-tags {
   font-size: 11px;
   font-weight: 700;

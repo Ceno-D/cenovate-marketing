@@ -43,6 +43,7 @@ console.log('Cenovate Marketing site loaded.');
 
   cards.forEach((card) => {
     const video = card.querySelector('.project-video');
+    const muteToggle = card.querySelector('.project-mute-toggle');
     const src = card.dataset.video;
 
     card.addEventListener('mouseenter', () => {
@@ -59,7 +60,25 @@ console.log('Cenovate Marketing site loaded.');
     card.addEventListener('mouseleave', () => {
       card.classList.remove('is-playing');
       video.pause();
+      // Reset to muted on every new hover — carrying an "unmuted" choice
+      // silently into the next card/next viewing would risk sound blasting
+      // unexpectedly later, which is worse than just asking again.
+      video.muted = true;
+      if (muteToggle) muteToggle.setAttribute('aria-pressed', 'false');
     });
+
+    if (muteToggle) {
+      muteToggle.addEventListener('click', (e) => {
+        // Stop this from bubbling to the card (which has no click handler
+        // right now, but this keeps the button's behavior self-contained
+        // regardless of what gets added to the card later).
+        e.stopPropagation();
+        const nowMuted = !video.muted;
+        video.muted = nowMuted;
+        muteToggle.setAttribute('aria-pressed', nowMuted ? 'false' : 'true');
+        muteToggle.setAttribute('aria-label', nowMuted ? 'Turn sound on' : 'Turn sound off');
+      });
+    }
   });
 })();
 
