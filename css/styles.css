@@ -1,0 +1,1636 @@
+/* ===================== Brand tokens ===================== */
+:root {
+  --color-bg: #000000;
+  --color-green: #bcd044;
+  --color-green-bright: #d4de6b;
+  --color-green-deep: #7d8f2e;
+  --color-text: #ffffff;
+  --color-text-muted: #a8a8a8;
+  /* light-section tokens — alternates with the black hero/dark sections */
+  --color-cream: #fbfaf3;
+  --color-ink: #16180c;
+  --color-ink-muted: #55583f;
+  --color-tint: #f2f4e2; /* pale olive tint for default grid-item bg */
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  scroll-behavior: smooth;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===================== Hero ===================== */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg-placeholder {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(188, 208, 68, 0.08) 0%, rgba(0,0,0,0) 60%),
+    #000000;
+}
+
+.hero-bg-placeholder::after {
+  content: "Spline scene goes here — send the Share/Embed link";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.02em;
+}
+
+.hero-bg-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #000000; /* avoids a white flash while the scene loads */
+  pointer-events: none; /* the scene's own cursor-tracking still works; this just stops scroll/click capture */
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    /* olive-green glow, centered roughly where the headline/CTA sit — lifts the
+       section out of flat black without washing out the Spline trails */
+    radial-gradient(ellipse 70% 55% at 50% 55%, rgba(188, 208, 68, 0.16) 0%, rgba(188, 208, 68, 0) 70%),
+    /* vignette: keeps the navbar strip and section edges reading as pure black */
+    linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.15) 35%, rgba(0,0,0,0.2) 65%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+}
+
+/* ===================== Navbar ===================== */
+.navbar {
+  position: relative;
+  /* Higher than .hero-content's z-index:2 — they're siblings, and equal
+     z-index falls back to DOM order (hero-content comes after navbar in
+     the markup, so it would otherwise paint over the open mobile menu). */
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 48px;
+}
+
+.nav-logo img {
+  /* 45px, not 40px — the crop got ~13% taller to fit the full "MARKETING" word,
+     so this compensates to keep CENOVATE the same visual size as before */
+  height: 45px;
+  width: auto;
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  color: var(--color-green);
+}
+
+.nav-cta {
+  background: var(--color-green);
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+
+.nav-cta:hover {
+  background: var(--color-green-bright);
+}
+
+/* Hamburger toggle — desktop-hidden, mobile-only (see media query below) */
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* 3 bars -> X, driven by aria-expanded (no extra JS-toggled class needed
+   for the icon itself, just reads the same attribute the toggle already sets) */
+.nav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+@media (max-width: 900px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: rgba(10, 10, 10, 0.97);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid rgba(188, 208, 68, 0.15);
+    padding: 8px 24px 24px;
+    /* Collapsed by default — max-height/opacity animate open instead of
+       display:none, so the close transition doesn't just snap instantly. */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: max-height 0.3s ease, opacity 0.25s ease;
+  }
+
+  .nav-links.is-open {
+    max-height: 400px;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .nav-links a {
+    padding: 14px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-cta {
+    margin-top: 12px;
+    text-align: center;
+  }
+}
+
+/* ===================== Hero content ===================== */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 24px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-headline {
+  font-size: clamp(2.1rem, 5vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  /* Growaz-style full-headline gradient: near-white at the top, warming into
+     the brand green by the last line — one continuous blend, not per-word. */
+  background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 32%, #e8edc4 50%, var(--color-green-bright) 70%, var(--color-green) 90%, #7d8f2e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* One word breaks from the bold sans into an italic serif — the gradient fill
+   comes from the parent .hero-headline (background-clip:text cascades to it),
+   this just changes the letterform. */
+.accent-word {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.hero-subhead {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--color-text-muted);
+  max-width: 640px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  transition: transform 0.15s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary {
+  background: var(--color-green);
+  color: #000;
+}
+
+.btn-primary:hover {
+  background: var(--color-green-bright);
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  position: relative;
+  background: transparent;
+  color: var(--color-green);
+  border: 1px solid rgba(188, 208, 68, 0.5);
+}
+
+.btn-outline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(188, 208, 68, 0.35);
+}
+
+/* PLACEHOLDER: full animated glow-outline effect (task #5) — basic hover glow for now */
+
+/* ===================== What I Do (light section) ===================== */
+.what-i-do {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  padding: 100px 48px 120px;
+  overflow-x: hidden; /* GSAP directional slide-ins shouldn't cause a transient horizontal scrollbar */
+}
+
+.section-header {
+  max-width: 720px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.eyebrow-dark {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-green-deep);
+  margin-bottom: 12px;
+}
+
+.section-title-dark {
+  font-size: clamp(1.75rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+  margin-bottom: 16px;
+}
+
+.section-subhead-dark {
+  font-size: 17px;
+  color: var(--color-ink-muted);
+  line-height: 1.6;
+}
+
+/* --- Primary 3 cards: default white, hover gains a green tint --- */
+.service-cards-primary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto 40px;
+}
+
+.service-card-primary {
+  background: #ffffff;
+  border-top: 4px solid var(--color-green);
+  border-radius: 4px;
+  padding: 28px 26px 32px;
+  transition: background 0.25s ease;
+}
+
+.service-card-primary:hover {
+  background: #eef2d9; /* light olive tint appears on hover */
+}
+
+.service-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-green-deep);
+  margin-bottom: 10px;
+}
+
+.service-card-primary h3 {
+  font-size: 21px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 12px;
+}
+
+.service-body {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--color-ink-muted);
+}
+
+/* --- "Everything I Handle" divider label --- */
+.grid-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-muted);
+  max-width: 1200px;
+  margin: 0 auto 28px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(22, 24, 12, 0.1);
+}
+
+/* --- Secondary 4-item grid: default tinted, hover flips to white
+   (deliberately reversed from the primary cards, per Danny's call) --- */
+.service-grid-secondary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.service-grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--color-tint);
+  border-left: 3px solid rgba(125, 143, 46, 0.4);
+  border-radius: 2px;
+  padding: 22px 24px;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.service-grid-item:hover {
+  background: #ffffff;
+  border-left-color: var(--color-green-deep);
+}
+
+.service-grid-text h4 {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-ink);
+  margin-bottom: 6px;
+}
+
+.service-grid-text p {
+  font-size: 14px;
+  color: var(--color-ink-muted);
+  line-height: 1.5;
+}
+
+.grid-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  color: var(--color-ink-muted);
+  stroke: currentColor;
+  transition: color 0.25s ease;
+}
+
+.service-grid-item:hover .grid-icon {
+  color: var(--color-green-deep);
+}
+
+@media (max-width: 900px) {
+  .service-cards-primary {
+    grid-template-columns: 1fr;
+  }
+  .service-grid-secondary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== Positioning ticker ===================== */
+.ticker-bar {
+  background: #000000;
+  overflow: hidden;
+  white-space: nowrap;
+  border-top: 1px solid rgba(188, 208, 68, 0.15);
+  border-bottom: 1px solid rgba(188, 208, 68, 0.15);
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-scroll 32s linear infinite;
+}
+
+.ticker-bar:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-set {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.ticker-set span:not(.ticker-dot) {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  padding: 18px 20px;
+}
+
+.ticker-dot {
+  color: var(--color-green);
+  font-size: 18px;
+  line-height: 0;
+}
+
+@keyframes ticker-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}
+
+/* ===================== The Real Problem (dark section) ===================== */
+.real-problem {
+  position: relative;
+  overflow: hidden;
+  background: #000000; /* fallback only — the iframe covers this entirely once loaded */
+  padding: 130px 24px;
+  text-align: center;
+}
+
+/* Real smoke-trail Spline embed. NOT pointer-events:none — this one actually
+   needs to receive the mouse to track it (unlike the hero background, which
+   only needed to look right, not respond to input). It'll only "see" the
+   cursor over empty space not covered by the text content above it (z-index),
+   same limitation the OC reference has around its own heading/button. */
+.rp-smoke-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  z-index: 0;
+  background: transparent;
+}
+
+/* Sits ABOVE the iframe (which paints its own opaque black) as a translucent
+   tint — this is what actually creates the visible top-to-bottom wash, since
+   anything painted into .real-problem's own background is hidden by the
+   iframe. Uses rgba (not solid colors) specifically so it reads as a tint
+   over the smoke/black beneath it, not a replacement for it. */
+.rp-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 35% at 50% 8%, rgba(188, 208, 68, 0.28) 0%, rgba(188, 208, 68, 0) 70%),
+    linear-gradient(180deg, rgba(188, 208, 68, 0.55) 0%, rgba(188, 208, 68, 0.22) 30%, rgba(188, 208, 68, 0) 65%);
+}
+
+.real-problem-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+  /* lets mousemove pass straight through to the smoke iframe underneath —
+     without this, hovering over the text "blocks" the cursor from the
+     Spline scene since the browser only delivers events to the topmost
+     element. Tradeoff: this text isn't mouse-selectable anymore, which is
+     an acceptable trade for a decorative section with no links/buttons. */
+  pointer-events: none;
+}
+
+.real-problem .eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-green-bright);
+  margin-bottom: 20px;
+}
+
+.rp-headline {
+  font-size: clamp(1.75rem, 3.4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 32px;
+}
+
+.rp-body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 20px;
+}
+
+.rp-divider {
+  width: 56px;
+  height: 2px;
+  background: var(--color-green);
+  margin: 36px auto;
+}
+
+.rp-closing {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #ffffff;
+}
+
+/* ===================== Projects (dark section) ===================== */
+.projects {
+  position: relative;
+  overflow: hidden;
+  background:
+    /* second glow sitting in the gap between the reel cards and the site
+       screenshot strip, so the two rows feel bridged rather than two
+       disconnected blocks sitting on flat black */
+    radial-gradient(ellipse 60% 30% at 50% 68%, rgba(188, 208, 68, 0.16) 0%, rgba(188, 208, 68, 0) 70%),
+    /* olive glow centered behind the reel cards row specifically, not the
+       header or the site-screenshot strip below it */
+    radial-gradient(ellipse 65% 45% at 50% 42%, rgba(188, 208, 68, 0.18) 0%, rgba(188, 208, 68, 0) 70%),
+    #000000;
+  padding: 110px 48px 100px;
+}
+
+.projects .section-header {
+  max-width: 720px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+.projects .eyebrow {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-green-bright);
+  margin-bottom: 16px;
+}
+
+.section-title-light {
+  font-size: clamp(1.5rem, 2.8vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.4;
+  color: #ffffff;
+}
+
+/* --- Reel cards: 9:16, thumbnail by default, video plays on hover --- */
+.project-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto 64px;
+}
+
+.project-card {
+  position: relative;
+  aspect-ratio: 9 / 16;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #111111;
+  cursor: pointer;
+}
+
+.project-thumb,
+.project-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 0.35s ease, transform 0.5s ease;
+}
+
+.project-video {
+  opacity: 0;
+}
+
+.project-card.is-playing .project-video {
+  opacity: 1;
+}
+
+.project-card.is-playing .project-thumb {
+  opacity: 0;
+}
+
+.project-card:hover .project-thumb {
+  transform: scale(1.04);
+}
+
+.project-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 20px 18px;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
+  pointer-events: none;
+}
+
+.project-tags {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--color-green-bright);
+  margin-bottom: 6px;
+}
+
+.project-name {
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+/* --- Site screenshot strip --- */
+.sites-strip-label {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: 24px;
+}
+
+.sites-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.site-shot {
+  display: block;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  transition: border-color 0.25s ease, transform 0.25s ease;
+}
+
+.site-shot:hover {
+  border-color: rgba(188, 208, 68, 0.4);
+  transform: translateY(-3px);
+}
+
+.site-shot-static {
+  /* Still not a link (Mediquip's live site is dated Wix work, not linked
+     on purpose) — but the hover LIFT is purely cosmetic polish, so it now
+     matches Parkway/NYWT's hover instead of feeling broken/inconsistent. */
+  cursor: default;
+}
+
+.site-shot img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+.site-shot span {
+  display: block;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: #0a0a0a;
+}
+
+@media (max-width: 900px) {
+  .project-cards {
+    grid-template-columns: 1fr;
+  }
+  .sites-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== Real Problem CTA button + animated glow ===================== */
+.rp-cta-glow {
+  position: relative;
+  display: inline-block;
+  /* .real-problem-inner (parent) has pointer-events:none so the smoke effect
+     can track the cursor through the text — re-enable it here specifically
+     so the button is actually clickable/hoverable. */
+  pointer-events: auto;
+  border-radius: 14px;
+  padding: 3px;
+  margin-top: 40px;
+  overflow: hidden; /* clips the rotating layer below to just the border ring */
+  isolation: isolate; /* keeps the rotating layer's stacking contained to this box */
+}
+
+/* The rotating conic-gradient lives on its own oversized layer BEHIND the
+   button — rotating this, not the wrapper itself, is what keeps the button
+   label upright while the glow travels around the border. */
+.rp-cta-glow::before {
+  content: '';
+  position: absolute;
+  inset: -60%;
+  z-index: 0;
+  background: conic-gradient(from 0deg, transparent 0deg, var(--color-green-bright) 60deg, transparent 140deg, transparent 360deg);
+  animation: rp-btn-rotate 2.5s linear infinite;
+}
+
+.rp-cta-btn {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  border-radius: 11px;
+  background: #0a0a0a;
+  color: var(--color-green-bright);
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rp-cta-glow:hover .rp-cta-btn {
+  background: var(--color-green-bright);
+  color: #0a0a0a;
+  box-shadow: 0 0 45px 12px rgba(212, 222, 107, 0.55);
+}
+
+@keyframes rp-btn-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rp-cta-glow {
+    animation: none;
+  }
+}
+
+/* ===================== Technical Skill / Creative Instinct (light section) ===================== */
+.skills-section {
+  background: var(--color-cream);
+  padding: 100px 48px 90px;
+  overflow-x: hidden; /* GSAP directional slide-ins shouldn't cause a transient horizontal scrollbar */
+}
+
+.skills-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1100px;
+  margin: 0 auto 44px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15);
+}
+
+.skill-card {
+  padding: 56px 48px;
+}
+
+.skill-card-dark {
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 0%, rgba(188, 208, 68, 0.22) 0%, rgba(188, 208, 68, 0) 60%),
+    #0a0a0a;
+  color: #ffffff;
+}
+
+.skill-card-light {
+  background:
+    radial-gradient(ellipse 70% 60% at 85% 0%, rgba(188, 208, 68, 0.16) 0%, rgba(188, 208, 68, 0) 60%),
+    #ffffff;
+  color: var(--color-ink);
+}
+
+.skill-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.skill-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.skill-card-dark .skill-icon {
+  background: rgba(188, 208, 68, 0.15);
+  color: var(--color-green-bright);
+}
+
+.skill-card-light .skill-icon {
+  background: rgba(188, 208, 68, 0.14);
+  color: var(--color-green-deep);
+}
+
+.skill-card h3 {
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.35;
+  margin-bottom: 18px;
+}
+
+/* Same accent treatment as "Searching" in the hero headline */
+.skill-accent-green,
+.skill-accent-lightgreen {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.skill-accent-green {
+  color: var(--color-green-bright);
+}
+
+.skill-accent-lightgreen {
+  color: var(--color-green-deep);
+}
+
+.skill-card p {
+  font-size: 15px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+}
+
+.skill-card-dark p {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.skill-card-light p {
+  color: var(--color-ink-muted);
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.skill-tags span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 7px 14px;
+  border-radius: 999px;
+}
+
+.skill-card-dark .skill-tags span {
+  background: rgba(188, 208, 68, 0.15);
+  color: var(--color-green-bright);
+}
+
+.skill-card-light .skill-tags span {
+  background: rgba(188, 208, 68, 0.12);
+  color: var(--color-green-deep);
+}
+
+.skills-closer {
+  text-align: center;
+  font-size: 19px;
+  font-style: italic;
+  color: var(--color-ink-muted);
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.skills-closer strong {
+  font-style: normal;
+  color: var(--color-ink);
+}
+
+.skills-section .section-header {
+  max-width: 680px;
+  margin: 0 auto 56px;
+  text-align: center;
+}
+
+/* Playfair italic accent, but this section is dark-text-on-light (unlike the
+   hero's gradient headline), so it needs an explicit color, not an inherited
+   gradient clip. */
+.skills-header-accent {
+  color: var(--color-green-deep);
+}
+
+@media (max-width: 900px) {
+  .skills-split {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ===================== How I Work / Process (dark section) ===================== */
+.process-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    /* brightest directly behind the center symbol, fading out toward the cards */
+    radial-gradient(ellipse 46% 60% at 50% 54%, rgba(188, 208, 68, 0.32) 0%, rgba(188, 208, 68, 0) 68%),
+    #000000;
+  padding: 110px 48px 130px;
+}
+
+.process-section .section-header {
+  max-width: 680px;
+  margin: 0 auto 64px;
+  text-align: center;
+}
+
+.process-section .eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-green-bright);
+  margin-bottom: 14px;
+}
+
+.process-accent {
+  color: var(--color-green-bright);
+}
+
+.process-subhead {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-top: 16px;
+}
+
+.process-hub {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.process-col {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  flex: 1;
+  max-width: 340px;
+}
+
+.process-col-left {
+  align-items: flex-end;
+}
+
+.process-col-right {
+  align-items: flex-start;
+}
+
+.process-card {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 14px;
+  padding: 26px 26px 28px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.process-card:hover {
+  transform: translateY(-3px);
+}
+
+.process-card-gray {
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.process-card-green {
+  border-color: rgba(188, 208, 68, 0.45);
+  /* brightness "carried over" from the center glow — leans toward the
+     symbol side (left edge of these right-column cards), per Danny's read
+     of how JSMM's real site does it */
+  box-shadow: -18px 0 44px -22px rgba(212, 222, 107, 0.55);
+}
+
+.process-card-green:hover {
+  border-color: var(--color-green-bright);
+}
+
+.process-num {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.55); /* bumped from 0.35 — Codex review flagged ~3:1 contrast, below WCAG AA for 13px text */
+  margin-bottom: 10px;
+}
+
+.process-card-green .process-num {
+  color: rgba(188, 208, 68, 0.7);
+}
+
+.process-card h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.process-label {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--color-green-bright);
+  margin-bottom: 12px;
+}
+
+.process-card-gray .process-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.process-body {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* --- Center symbol + connector lines --- */
+.process-center {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+.process-symbol {
+  position: relative;
+  width: 240px;
+  height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.process-symbol::before {
+  content: '';
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(188, 208, 68, 0.35) 0%, rgba(188, 208, 68, 0) 70%);
+  animation: process-symbol-pulse 3.5s ease-in-out infinite;
+}
+
+.process-symbol img {
+  position: relative;
+  z-index: 1;
+  width: 190px;
+  height: auto;
+  filter: drop-shadow(0 0 34px rgba(188, 208, 68, 0.55));
+}
+
+@keyframes process-symbol-pulse {
+  0%, 100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+/* Connectors: same "<" chevron shape on both sides (two arms meeting at an
+   outer vertex), right side simply mirrored via scaleX(-1) so it reads as
+   ">". Deliberately decorative/non-touching, not wired to each card's
+   exact edge. */
+.process-chevron {
+  position: relative;
+  width: 60px;
+  height: 140px;
+  flex-shrink: 0;
+}
+
+.process-chevron::before,
+.process-chevron::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 3px;
+  height: 78px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.32) 100%);
+}
+
+.process-chevron::before {
+  top: 0;
+  transform-origin: top center;
+  transform: rotate(28deg);
+}
+
+.process-chevron::after {
+  bottom: 0;
+  transform-origin: bottom center;
+  transform: rotate(-28deg);
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.32) 100%);
+}
+
+/* Right = same shape, mirrored, recolored bright green to read as catching the center glow */
+.process-chevron-right {
+  transform: scaleX(-1);
+}
+
+.process-chevron-right::before,
+.process-chevron-right::after {
+  background: linear-gradient(180deg, rgba(188, 208, 68, 0) 0%, rgba(212, 222, 107, 0.85) 100%);
+}
+
+.process-chevron-right::after {
+  background: linear-gradient(0deg, rgba(188, 208, 68, 0) 0%, rgba(212, 222, 107, 0.85) 100%);
+}
+
+/* Mobile-only vertical connectors, replacing the horizontal chevrons */
+.process-vline {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .process-hub {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .process-col {
+    max-width: 420px;
+    width: 100%;
+  }
+
+  .process-col-left,
+  .process-col-right {
+    align-items: stretch;
+  }
+
+  .process-chevron {
+    display: none;
+  }
+
+  .process-center {
+    flex-direction: column;
+    gap: 0;
+    padding: 6px 0;
+  }
+
+  .process-vline {
+    display: block;
+    width: 2px;
+    height: 34px;
+    background: linear-gradient(180deg, rgba(188, 208, 68, 0) 0%, rgba(188, 208, 68, 0.5) 100%);
+  }
+
+  .process-vline-bottom {
+    background: linear-gradient(0deg, rgba(188, 208, 68, 0) 0%, rgba(188, 208, 68, 0.5) 100%);
+  }
+
+  .process-symbol {
+    width: 160px;
+    height: 160px;
+  }
+
+  .process-symbol img {
+    width: 120px;
+  }
+
+  .process-card-green {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .process-symbol::before {
+    animation: none;
+  }
+}
+
+/* ===================== Why Cenovate Your Business (Mission, dark section) ===================== */
+.mission-section {
+  position: relative;
+  overflow: hidden;
+  background: #000000; /* fallback only — the video covers this once loaded */
+  padding: 130px 24px 150px;
+}
+
+.mission-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills the section at any height, no stacking needed */
+  z-index: 0;
+}
+
+/* Dims/tints the busy data-grid video so the timeline text stays legible —
+   same technique as .rp-gradient-overlay in The Real Problem section. */
+.mission-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.15) 60%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.55) 15%, rgba(0, 0, 0, 0.65) 85%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+.mission-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.mission-section .section-header {
+  max-width: 680px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.mission-section .eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-green-bright);
+  margin-bottom: 14px;
+}
+
+.mission-accent {
+  color: var(--color-green-bright);
+}
+
+/* --- Vertical timeline --- */
+.mission-timeline {
+  position: relative;
+}
+
+/* Gray/white track by default — .timeline-line-fill (JS-driven, grows with
+   scroll position) is what turns it green as you scroll past each step.
+   top/height are set by main.js (positionLine) to run exactly from the
+   center of the first dot to the center of the last dot, since card
+   heights vary and a fixed CSS top/bottom can't track that reliably. */
+.timeline-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 0;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.22);
+  overflow: visible;
+}
+
+.timeline-line-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: linear-gradient(180deg, var(--color-green-bright) 0%, var(--color-green) 100%);
+  box-shadow: 0 0 10px rgba(188, 208, 68, 0.5);
+}
+
+.timeline-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr;
+  align-items: start;
+  gap: 0 40px;
+  margin-bottom: 64px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Dot sits at the top of the card (matching the OC reference), not centered
+   on it — nudged down slightly to land level with the card's number/title. */
+.timeline-dot {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: center;
+  margin-top: 22px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.32);
+  box-shadow: none;
+  transition: background 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Active state — toggled by JS (main.js) via IntersectionObserver/scroll
+   tracking as each item is scrolled past. */
+.timeline-item.is-active .timeline-dot {
+  background: var(--color-green-bright);
+  box-shadow: 0 0 18px 4px rgba(212, 222, 107, 0.55);
+}
+
+.timeline-left .timeline-content {
+  grid-column: 1;
+  text-align: right;
+}
+
+.timeline-right .timeline-content {
+  grid-column: 3;
+  text-align: left;
+}
+
+.timeline-content {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(188, 208, 68, 0.2);
+  border-radius: 12px;
+  padding: 24px 28px;
+  backdrop-filter: blur(2px);
+  transition: background 0.4s ease, border-color 0.4s ease;
+}
+
+/* Card highlight as you scroll past it — same idea as OC's cards shifting
+   to light gray, ours shifts to a light brand-green tint instead. */
+.timeline-item.is-active .timeline-content {
+  background: rgba(188, 208, 68, 0.14);
+  border-color: rgba(188, 208, 68, 0.45);
+}
+
+/* ===================== Final CTA — The Free Audit (dark section) ===================== */
+/* Scrapped the wavy black-shape-on-cream treatment after several rounds —
+   Danny called it and asked for a plain dark section instead, matching the
+   rest of the page. Green glows top and bottom blend into Mission's video
+   section above and the Footer below, same idea as before, just without
+   the cream background or the wave shape carrying the transition. */
+.final-cta-section {
+  position: relative;
+  overflow: hidden;
+  /* No top glow — the whole lower half washes green instead, so it merges
+     with the Footer's own top wash into one continuous glow at the seam. */
+  background:
+    linear-gradient(180deg, rgba(188, 208, 68, 0) 0%, rgba(188, 208, 68, 0) 42%, rgba(188, 208, 68, 0.22) 100%),
+    #000000;
+  padding: 130px 40px;
+}
+
+.final-cta-content {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.final-cta-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-green-bright);
+  margin-bottom: 16px;
+}
+
+.final-cta-headline {
+  font-size: clamp(1.5rem, 3vw, 2.15rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.final-cta-accent {
+  color: var(--color-green-bright);
+}
+
+.final-cta-body {
+  font-size: 16px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 22px;
+}
+
+.final-cta-closer {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-green-bright);
+  margin-bottom: 32px;
+}
+
+.final-cta-btn {
+  display: inline-flex;
+}
+
+@media (max-width: 900px) {
+  .final-cta-section {
+    padding: 90px 24px;
+  }
+}
+
+.timeline-num {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(188, 208, 68, 0.7);
+  margin-bottom: 8px;
+}
+
+.timeline-content h3 {
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.timeline-content p {
+  font-size: 14px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 900px) {
+  .timeline-line {
+    left: 8px;
+  }
+
+  .timeline-item {
+    grid-template-columns: 16px 1fr;
+    gap: 0 20px;
+    margin-bottom: 40px;
+  }
+
+  .timeline-dot {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .timeline-left .timeline-content,
+  .timeline-right .timeline-content {
+    grid-column: 2;
+    text-align: left;
+  }
+}
+
+/* ===================== Footer ===================== */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+  /* Top half washes green (meets the Final CTA section's bottom wash right
+     at the seam) — kept the original subtle bottom-right spot for depth. */
+  background:
+    linear-gradient(180deg, rgba(188, 208, 68, 0.22) 0%, rgba(188, 208, 68, 0) 58%),
+    radial-gradient(ellipse 45% 60% at 100% 100%, rgba(188, 208, 68, 0.12) 0%, rgba(188, 208, 68, 0) 60%),
+    #000000;
+  padding: 80px 48px 0;
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 56px;
+}
+
+.footer-logo {
+  height: 40px;
+  width: auto;
+  display: block;
+  margin-bottom: 18px;
+}
+
+.footer-tagline {
+  font-size: 15px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+
+.footer-book-btn {
+  display: inline-flex;
+}
+
+.footer-col-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--color-green-bright);
+  margin-bottom: 18px;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links a,
+.footer-site-url {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: var(--color-green-bright);
+}
+
+.footer-site-url {
+  display: block;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 22px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.footer-bottom p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.footer-bottom p.footer-bottom-tag {
+  color: rgba(188, 208, 68, 0.7);
+}
+
+@media (max-width: 900px) {
+  .site-footer {
+    padding: 60px 24px 0;
+  }
+
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+*.log
+
+# Design reference/inspiration screenshots — internal use only, not site assets,
+# some are competitor/reference site screenshots that shouldn't sit in a public repo
+assets/examples/
+
+# Windows Explorer junk
+desktop.ini
+**/desktop.ini
+
+# Leftover debug screenshot, not a site asset
+check-logo.png
