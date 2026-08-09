@@ -14,7 +14,7 @@
   <!-- ?v= cache-buster — styles.css never had one until now, which is why the
        Projects grid silently failed to update in the browser despite the
        server having the correct CSS. Bump this number on every future CSS edit. -->
-  <link rel="stylesheet" href="css/styles.css?v=32" />
+  <link rel="stylesheet" href="css/styles.css?v=33" />
   <!-- Spline viewer runtime (Free plan: embedding via public share link/iframe, not self-hosted code export) -->
 </head>
 <body>
@@ -266,15 +266,24 @@
     <p class="sites-strip-label">WEBSITES I'VE BUILT</p>
     <div class="sites-strip">
       <a class="site-shot" href="https://parkway-car-stereo.vercel.app" target="_blank" rel="noopener">
-        <img src="assets/sites/parkway-site.png?v=2" alt="Parkway Car Stereo website" />
+        <div class="site-shot-images">
+          <img src="assets/sites/parkway-site.png?v=2" alt="Parkway Car Stereo website hero section" />
+          <img src="assets/sites/parkway-site-2.png?v=1" alt="Parkway Car Stereo website — James helps you pick what fits section" />
+        </div>
         <span>Parkway Car Stereo</span>
       </a>
       <a class="site-shot" href="https://windowtint.newyorkwindowtinting.com/" target="_blank" rel="noopener">
-        <img src="assets/sites/nywindowtinting-site.png?v=3" alt="NY Window Tinting PMax landing page" />
+        <div class="site-shot-images">
+          <img src="assets/sites/nywindowtinting-site.png?v=3" alt="NY Window Tinting before &amp; after tint comparison section" />
+          <img src="assets/sites/nywindowtinting-site-2.png?v=1" alt="NY Window Tinting choose your darkness shade picker section" />
+        </div>
         <span>NY Window Tinting</span>
       </a>
       <div class="site-shot site-shot-static">
-        <img src="assets/sites/mediquip-site.png?v=2" alt="Mediquip Homecare/DME website" />
+        <div class="site-shot-images">
+          <img src="assets/sites/mediquip-site.png?v=2" alt="Mediquip Homecare/DME website hero section" />
+          <img src="assets/sites/mediquip-site-2.png?v=1" alt="Mediquip Homecare/DME compassion, reliability, expertise section" />
+        </div>
         <span>Mediquip Homecare/DME</span>
       </div>
     </div>

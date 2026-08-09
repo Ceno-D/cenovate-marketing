@@ -757,12 +757,36 @@ a {
   cursor: default;
 }
 
-.site-shot img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
+/* Two shots per site now (was one) — side by side on desktop so each card
+   reads as "two highlights from this project," not a screenshot dump.
+   Narrower per-image aspect ratio (4/5, taller) since each is now half
+   width, so together the pair still fills roughly the same visual weight
+   the single 16:10 shot used to. */
+.site-shot-images {
+  display: flex;
+  gap: 2px;
+}
+
+.site-shot-images img {
+  width: 50%;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: top;
   display: block;
+}
+
+@media (max-width: 600px) {
+  /* Stacks instead of staying side-by-side — at ~50% of a narrow phone
+     width each shot would be too small to read any detail. */
+  .site-shot-images {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .site-shot-images img {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
 }
 
 .site-shot span {
