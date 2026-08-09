@@ -998,6 +998,22 @@ a {
   }
 }
 
+@media (max-width: 600px) {
+  /* .skills-section's 48px side padding + .skill-card's own 48px side
+     padding compound on a narrow phone (96px lost to padding alone on
+     each side), squeezing each card down to ~200px of usable width —
+     that's why the tag pills were stacking one-per-line instead of
+     flowing 2-3 across like the reference. Both get real mobile values. */
+  .skills-section {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .skill-card {
+    padding: 40px 28px;
+  }
+}
+
 /* ===================== How I Work / Process (dark section) ===================== */
 .process-section {
   position: relative;
