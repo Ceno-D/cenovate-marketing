@@ -235,6 +235,17 @@ a {
   margin: 0 auto;
 }
 
+@media (max-width: 900px) {
+  .hero-content {
+    /* Dead-center vertical alignment leaves a big empty gap above the
+       headline on mobile, since the content block is much shorter than
+       the leftover space below the navbar in a min-height:100vh hero.
+       Pulling it toward the top instead reads much closer to the nav. */
+    justify-content: flex-start;
+    padding-top: 64px;
+  }
+}
+
 .hero-headline {
   font-size: clamp(2.1rem, 5vw, 3.75rem);
   font-weight: 700;
