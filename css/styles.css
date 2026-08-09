@@ -757,36 +757,21 @@ a {
   cursor: default;
 }
 
-/* Two shots per site now (was one) — side by side on desktop so each card
-   reads as "two highlights from this project," not a screenshot dump.
-   Narrower per-image aspect ratio (4/5, taller) since each is now half
-   width, so together the pair still fills roughly the same visual weight
-   the single 16:10 shot used to. */
+/* Two shots per site — stacked vertically, full width, natural aspect
+   ratio (no aspect-ratio/object-fit crop). Side-by-side at 50% width was
+   cropping real content out of each screenshot, which defeated the point
+   of showing the full section. Same stacked treatment at every screen
+   size, so nothing needs to reflow between desktop and mobile. */
 .site-shot-images {
   display: flex;
+  flex-direction: column;
   gap: 2px;
 }
 
 .site-shot-images img {
-  width: 50%;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: top;
+  width: 100%;
+  height: auto;
   display: block;
-}
-
-@media (max-width: 600px) {
-  /* Stacks instead of staying side-by-side — at ~50% of a narrow phone
-     width each shot would be too small to read any detail. */
-  .site-shot-images {
-    flex-direction: column;
-    gap: 2px;
-  }
-
-  .site-shot-images img {
-    width: 100%;
-    aspect-ratio: 16 / 10;
-  }
 }
 
 .site-shot span {
