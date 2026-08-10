@@ -13,4 +13,7 @@ desktop.ini
 # Leftover debug screenshot, not a site asset
 check-logo.png
 
+# Local backups of replaced reel assets — not site assets, not for the repo
+assets/_backup-*/
+
 .vercel
