@@ -704,6 +704,49 @@ a {
   pointer-events: none;
 }
 
+/* Play button — visible on the static thumbnail by default so it's obvious
+   the card is a playable video (hover isn't discoverable on touch devices).
+   Fades out once the card starts playing (hover OR this button), same as
+   the thumbnail image. */
+.project-play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.25s ease, background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+.project-play-button svg {
+  width: 22px;
+  height: 22px;
+  margin-left: 3px; /* optical centering — a play triangle looks off-center otherwise */
+}
+
+.project-play-button:hover {
+  background: rgba(188, 208, 68, 0.85);
+  border-color: rgba(188, 208, 68, 0.85);
+  color: #000000;
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.project-card.is-playing .project-play-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
 /* Mute toggle — video starts muted and stays that way until clicked, since
    hover alone isn't a strong enough browser permission for audio (Safari/
    iOS especially). Hidden until the card is actually playing, so it's not

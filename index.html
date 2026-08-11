@@ -238,6 +238,15 @@
       <div class="project-card" data-video="assets/reels/parkway-reel.mp4">
         <img class="project-thumb" src="assets/reels/parkway-reel-thumb.jpg" alt="Parkway Car Stereo reel thumbnail" />
         <video class="project-video" muted loop playsinline preload="none"></video>
+        <!-- Visible on the static thumbnail so it's obvious this is a playable
+             video (hover-to-play isn't discoverable on touch devices). A real
+             click/tap also satisfies Safari/iOS's audio-permission requirement,
+             so this button starts playback WITH sound already on. -->
+        <button class="project-play-button" type="button" aria-label="Play video with sound">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
         <!-- Starts muted (autoplay-with-sound on hover isn't reliable across
              browsers — Safari/iOS in particular require a real click, not a
              hover, before audio is allowed). Click reliably satisfies that,
@@ -263,6 +272,11 @@
       <div class="project-card" data-video="assets/reels/nywindowtinting-reel.mp4">
         <img class="project-thumb" src="assets/reels/nywindowtinting-reel-thumb.jpg" alt="NY Window Tinting reel thumbnail" />
         <video class="project-video" muted loop playsinline preload="none"></video>
+        <button class="project-play-button" type="button" aria-label="Play video with sound">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
         <button class="project-mute-toggle" type="button" aria-label="Turn sound on" aria-pressed="false">
           <svg class="icon-muted" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor" stroke="none" />
@@ -284,6 +298,11 @@
       <div class="project-card" data-video="assets/reels/mediquip-reel.mp4">
         <img class="project-thumb" src="assets/reels/mediquip-reel-thumb.jpg" alt="Mediquip Homecare/DME reel thumbnail" />
         <video class="project-video" muted loop playsinline preload="none"></video>
+        <button class="project-play-button" type="button" aria-label="Play video with sound">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </button>
         <button class="project-mute-toggle" type="button" aria-label="Turn sound on" aria-pressed="false">
           <svg class="icon-muted" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M4 9v6h4l5 5V4L8 9H4z" fill="currentColor" stroke="none" />

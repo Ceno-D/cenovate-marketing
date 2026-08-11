@@ -44,7 +44,34 @@ console.log('Cenovate Marketing site loaded.');
   cards.forEach((card) => {
     const video = card.querySelector('.project-video');
     const muteToggle = card.querySelector('.project-mute-toggle');
+    const playButton = card.querySelector('.project-play-button');
     const src = card.dataset.video;
+
+    // Explicit play button — the main fix for touch devices, which have no
+    // hover state and previously gave no visible cue that these thumbnails
+    // were playable videos. A real click/tap is also a genuine user gesture,
+    // so we can safely start playback WITH sound already on (unlike the
+    // hover-to-play path below, which browsers force to start muted).
+    if (playButton) {
+      playButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (!video.src) {
+          video.src = src;
+        }
+        card.classList.add('is-playing');
+        video.muted = false;
+        video.play().catch(() => {
+          // If the browser still blocks unmuted autoplay for some reason,
+          // fall back to a muted play rather than showing nothing at all.
+          video.muted = true;
+          video.play().catch(() => {});
+        });
+        if (muteToggle) {
+          muteToggle.setAttribute('aria-pressed', 'true');
+          muteToggle.setAttribute('aria-label', 'Turn sound off');
+        }
+      });
+    }
 
     card.addEventListener('mouseenter', () => {
       if (!video.src) {
