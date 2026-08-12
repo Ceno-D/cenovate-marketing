@@ -17,3 +17,6 @@ check-logo.png
 assets/_backup-*/
 
 .vercel
+
+# Git worktrees used for isolated feature work (superpowers subagent-driven-development)
+.worktrees/
