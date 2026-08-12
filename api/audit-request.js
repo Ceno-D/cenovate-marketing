@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
   const location = String(body.location || '').trim();
   const website = String(body.website || '').trim();
   const phone = String(body.phone || '').trim();
-  const consent = Boolean(body.consent);
+  const consent = body.consent === true;
   const source = ALLOWED_SOURCES.indexOf(body.source) !== -1 ? body.source : 'direct';
 
   if (!contactName || !businessName || !email || !location) {
@@ -68,21 +68,26 @@ module.exports = async function handler(req, res) {
   if (website) fields.Website = website;
   if (phone) fields.Phone = phone;
 
-  const airtableRes = await fetch(
-    `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
-    {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ fields: fields, typecast: true }),
-    }
-  );
+  try {
+    const airtableRes = await fetch(
+      `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_ID}`,
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ fields: fields, typecast: true }),
+      }
+    );
 
-  if (!airtableRes.ok) {
-    const errText = await airtableRes.text();
-    console.error('Airtable create record failed:', airtableRes.status, errText);
+    if (!airtableRes.ok) {
+      const errText = await airtableRes.text();
+      console.error('Airtable create record failed:', airtableRes.status, errText);
+      return res.status(502).json({ error: 'Failed to save audit request' });
+    }
+  } catch (err) {
+    console.error('Airtable create record threw:', err);
     return res.status(502).json({ error: 'Failed to save audit request' });
   }
 
