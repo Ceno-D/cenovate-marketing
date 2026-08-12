@@ -15,7 +15,12 @@
        Projects grid silently failed to update in the browser despite the
        server having the correct CSS. Bump this number on every future CSS edit. -->
   <link rel="stylesheet" href="css/styles.css?v=35" />
-  <!-- Spline viewer runtime (Free plan: embedding via public share link/iframe, not self-hosted code export) -->
+  <!-- Spline viewer runtime: embedding via public share link/iframe, not self-hosted code export.
+       Danny upgraded his app.spline.design plan 2026-08-12 to remove the Spline watermark
+       (Starter, ~$12-15/mo). Watermark visibility is controlled server-side by Spline based on
+       the plan tied to the account that owns these scenes — no code change removes it directly,
+       but the ?v= cache-buster on each iframe below was bumped to force a fresh render instead
+       of a stale cached (watermarked) one. -->
 </head>
 <body>
 
@@ -23,12 +28,15 @@
   <section class="hero">
     <div class="hero-bg">
       <!-- Danny's recolored (lime-green) Motion Trails scene, confirmed 2026-08-07.
-           ?v=2 is a cache-buster — Spline's public URL was serving a stale cached
-           render of the old blue version without it. Bump this number any time
-           the scene is updated again and the embed looks stale. -->
+           ?v=3 is a cache-buster — Spline's public URL was serving a stale cached
+           render of the old blue version without it. Bumped 2026-08-12 after
+           Danny upgraded his app.spline.design plan, to force a fresh (non-
+           watermarked) render instead of Spline's cached free-tier version.
+           Bump this number any time the scene is updated again and the embed
+           looks stale. -->
       <iframe
         class="hero-bg-iframe"
-        src="https://my.spline.design/motiontrails-WrYr5wGaNfCsySFhzAUGoraP/?v=2"
+        src="https://my.spline.design/motiontrails-WrYr5wGaNfCsySFhzAUGoraP/?v=3"
         frameborder="0"
         title="Cenovate hero background animation"
       ></iframe>
@@ -202,10 +210,12 @@
   <!-- ===================== THE REAL PROBLEM ===================== -->
   <section class="real-problem" id="real-problem">
     <!-- Real particle-based smoke trail (Spline scene, recolored + hover-only,
-         no visible cursor sphere) — replaces the earlier CSS-only glow approx. -->
+         no visible cursor sphere) — replaces the earlier CSS-only glow approx.
+         ?v=3 cache-buster bumped 2026-08-12 after Danny upgraded his
+         app.spline.design plan, to force a fresh (non-watermarked) render. -->
     <iframe
       class="rp-smoke-iframe"
-      src="https://my.spline.design/colorfulsmokemousefolloweffect-KSp7Fenu68BlJSw7y7PpcNWr/?v=2"
+      src="https://my.spline.design/colorfulsmokemousefolloweffect-KSp7Fenu68BlJSw7y7PpcNWr/?v=3"
       frameborder="0"
       title="Cursor smoke trail effect"
     ></iframe>
