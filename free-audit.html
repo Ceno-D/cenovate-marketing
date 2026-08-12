@@ -68,7 +68,7 @@
         <h2 class="audit-checklist-title">Everywhere a customer might look for you, I check it.</h2>
 
         <div class="check-item">
-          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="10" cy="10" r="10" fill="currentColor"/>
             <path d="M6 10.5L8.5 13L14 7" stroke="#16180c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="check-item">
-          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="10" cy="10" r="10" fill="currentColor"/>
             <path d="M6 10.5L8.5 13L14 7" stroke="#16180c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -90,7 +90,7 @@
         </div>
 
         <div class="check-item">
-          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="10" cy="10" r="10" fill="currentColor"/>
             <path d="M6 10.5L8.5 13L14 7" stroke="#16180c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -101,7 +101,7 @@
         </div>
 
         <div class="check-item">
-          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg class="check-icon" width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <circle cx="10" cy="10" r="10" fill="currentColor"/>
             <path d="M6 10.5L8.5 13L14 7" stroke="#16180c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -211,12 +211,12 @@
           </label>
         </div>
 
-        <div class="audit-form-error" id="audit-error" hidden></div>
+        <div class="audit-form-error" id="audit-error" role="alert" hidden></div>
 
         <button type="submit" class="btn btn-primary audit-submit-btn" id="audit-submit">Get My Free Audit</button>
       </form>
 
-      <div class="audit-form-success" id="audit-success" hidden>
+      <div class="audit-form-success" id="audit-success" role="status" aria-live="polite" hidden>
         Thanks — I'll have your free audit ready within 24 hours, sent straight to your email.
       </div>
     </div>
