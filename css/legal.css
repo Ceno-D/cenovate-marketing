@@ -1,0 +1,46 @@
+/* ===================== Legal pages — prose typography ===================== */
+.legal-section {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  padding: 100px 24px 120px;
+}
+
+.legal-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.legal-inner h1 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.legal-updated {
+  font-size: 13px;
+  color: var(--color-ink-muted);
+  margin-bottom: 40px;
+}
+
+.legal-inner h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 36px 0 12px;
+}
+
+.legal-inner p,
+.legal-inner li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-ink-muted);
+}
+
+.legal-inner ul {
+  padding-left: 22px;
+  margin-bottom: 16px;
+}
+
+.legal-inner a {
+  color: var(--color-green-deep);
+  text-decoration: underline;
+}
