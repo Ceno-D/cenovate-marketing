@@ -23,12 +23,12 @@
 }
 
 .audit-proof-inner {
-  max-width: 1320px;
+  max-width: 1160px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 0.85fr 1.15fr;
-  gap: 56px;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
 }
 
 @media (max-width: 900px) {
@@ -77,24 +77,27 @@
   color: var(--color-ink-muted);
 }
 
-/* ===================== Dashboard mockup — 2 real, full-size sample-report crops ===================== */
+/* ===================== Dashboard mockup — 2 real sample-report crops, overlapping ===================== */
 /* Real multi-section composites from 2 actual delivered audits (2026-08-12) — each stitches
    together several real chart/stat sections (KPI grid + bar chart + donut + search-volume
    chart for the website sample; content-mix + engagement-pattern sections for the social
    sample), all business-identifying text (names, addresses, handles) cropped out of frame.
    Website/GBP sample is light-theme, Social sample is dark-theme — deliberate contrast per
-   Danny's call. Shown at real size, stacked (not overlapping/rotated) so the actual data is
-   legible, not just a decorative thumbnail. */
+   Danny's call. Layered/overlapping treatment (back to the originally-approved direction,
+   referencing Motiliti's staggered-card visual) — the dark Social card sits front-and-right,
+   overlapping the light Website card's bottom-right corner. Scaled down from the earlier
+   full-size stacked version (too large) but bigger than the original 3-tiny-card mockup
+   (only 2 real reports now, so each can afford more room). */
 .audit-dashboard-mockup {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+  position: relative;
+  min-height: 560px;
 }
 
 .sample-card {
+  position: absolute;
   margin: 0;
-  border-radius: 16px;
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
   overflow: hidden;
 }
 
@@ -105,15 +108,20 @@
 }
 
 .sample-card figcaption {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 14px 18px;
+  padding: 10px 14px;
 }
 
 .sample-card-website {
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 420px;
   background: #ffffff;
+  transform: rotate(-2deg);
 }
 
 .sample-card-website figcaption {
@@ -122,12 +130,29 @@
 }
 
 .sample-card-social {
+  top: 270px;
+  left: 230px;
+  z-index: 2;
+  width: 340px;
   background: #0d0f08;
+  transform: rotate(2deg);
 }
 
 .sample-card-social figcaption {
   color: rgba(255, 255, 255, 0.55);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 900px) {
+  .audit-dashboard-mockup {
+    min-height: 0;
+  }
+  .sample-card {
+    position: static;
+    transform: none !important;
+    width: 100%;
+    margin-bottom: 20px;
+  }
 }
 
 /* ===================== Form section ===================== */
