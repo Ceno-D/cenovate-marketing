@@ -23,12 +23,12 @@
 }
 
 .audit-proof-inner {
-  max-width: 1160px;
+  max-width: 1320px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 56px;
+  align-items: start;
 }
 
 @media (max-width: 900px) {
@@ -77,25 +77,24 @@
   color: var(--color-ink-muted);
 }
 
-/* ===================== Dashboard mockup — 2 real sample-report crops ===================== */
-/* Real crops from 2 actual delivered audits (2026-08-12) — business names cropped out of
-   frame entirely, nothing in either image identifies the client. Website/GBP sample is
-   light-theme (matches the Semrush-style dashboard format), Social sample is dark-theme
-   (matches the Ambrosia-style dashboard format) — deliberate contrast per Danny's call.
-   Layered/overlapping treatment retained from the original approved direction. */
+/* ===================== Dashboard mockup — 2 real, full-size sample-report crops ===================== */
+/* Real multi-section composites from 2 actual delivered audits (2026-08-12) — each stitches
+   together several real chart/stat sections (KPI grid + bar chart + donut + search-volume
+   chart for the website sample; content-mix + engagement-pattern sections for the social
+   sample), all business-identifying text (names, addresses, handles) cropped out of frame.
+   Website/GBP sample is light-theme, Social sample is dark-theme — deliberate contrast per
+   Danny's call. Shown at real size, stacked (not overlapping/rotated) so the actual data is
+   legible, not just a decorative thumbnail. */
 .audit-dashboard-mockup {
-  position: relative;
-  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
 }
 
 .sample-card {
-  position: absolute;
   margin: 0;
-  background: #ffffff;
-  border-radius: 14px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
-  padding: 10px;
-  width: 340px;
+  border-radius: 16px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.16);
   overflow: hidden;
 }
 
@@ -103,48 +102,32 @@
   display: block;
   width: 100%;
   height: auto;
-  border-radius: 8px;
 }
 
 .sample-card figcaption {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--color-ink-muted);
-  margin-top: 8px;
-  padding: 0 2px;
+  padding: 14px 18px;
 }
 
 .sample-card-website {
-  top: 0;
-  left: 0;
-  z-index: 2;
-  transform: rotate(-3deg);
+  background: #ffffff;
+}
+
+.sample-card-website figcaption {
+  color: var(--color-ink-muted);
+  border-top: 1px solid #ececec;
 }
 
 .sample-card-social {
-  top: 130px;
-  left: 110px;
-  z-index: 1;
   background: #0d0f08;
-  transform: rotate(2.5deg);
 }
 
 .sample-card-social figcaption {
   color: rgba(255, 255, 255, 0.55);
-}
-
-@media (max-width: 900px) {
-  .audit-dashboard-mockup {
-    min-height: 0;
-  }
-  .sample-card {
-    position: static;
-    transform: none !important;
-    width: 100%;
-    margin-bottom: 20px;
-  }
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* ===================== Form section ===================== */
