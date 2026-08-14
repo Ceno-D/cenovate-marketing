@@ -157,7 +157,15 @@
 
 /* ===================== Form section ===================== */
 .audit-form-section {
-  background: #000000;
+  position: relative;
+  overflow: hidden;
+  /* Bottom half washes green, meeting .site-footer's own top wash right at
+     the seam — same technique as .final-cta-section -> .site-footer on the
+     homepage (see css/styles.css), applied here so this page blends the
+     same way. */
+  background:
+    linear-gradient(180deg, rgba(188, 208, 68, 0) 0%, rgba(188, 208, 68, 0) 42%, rgba(188, 208, 68, 0.22) 100%),
+    #000000;
   padding: 110px 48px;
 }
 
