@@ -32,6 +32,58 @@ a {
   text-decoration: none;
 }
 
+/* ===================== Line-breaking / orphan control =====================
+   Danny's standing rule: never leave a line with just one word on it.
+
+   `balance` evens out the lines of short multi-line text (headings, eyebrows,
+   CTA lines), which is what stops a heading wrapping to a lone trailing word.
+   `pretty` is the body-copy equivalent: it specifically avoids leaving an
+   orphan on the final line of a paragraph.
+
+   Both are progressive enhancements — browsers that don't support them just
+   ignore the declaration and wrap as before, so there's no fallback risk.
+   `balance` is deliberately NOT used on long paragraphs: browsers cap it at a
+   few lines and silently give up past that, which is why body copy gets
+   `pretty` instead. */
+h1, h2, h3, h4, h5, h6,
+.eyebrow,
+.section-title-dark,
+.section-title-light,
+.hero-headline,
+.rp-headline,
+.rp-closing,
+.final-cta-headline,
+.audit-cta-line,
+.grid-label,
+.sites-strip-label,
+.process-label,
+.footer-col-label,
+.service-label,
+.site-shot-tag,
+.site-shot span,
+/* free-audit.html shares this stylesheet — its eyebrows are <p> elements, so
+   they need naming here to beat the paragraph rule below on specificity */
+.audit-hero-eyebrow,
+.audit-checklist-eyebrow,
+.audit-checklist-title,
+.audit-form-title {
+  text-wrap: balance;
+}
+
+p,
+li,
+figcaption,
+.hero-subhead,
+.section-subhead-dark,
+.process-subhead,
+.rp-body,
+.service-body,
+.final-cta-body,
+.final-cta-closer,
+.process-body {
+  text-wrap: pretty;
+}
+
 /* ===================== Hero ===================== */
 .hero {
   position: relative;
@@ -625,67 +677,112 @@ a {
   color: #ffffff;
 }
 
-/* ===================== Audit teaser links (sprinkled secondary CTAs) =====================
-   Softer than the main "Get My Free Marketing Audit" buttons — for visitors
-   who wouldn't click a big CTA but are curious what the audit contains.
-   Deep-links to the checklist/sample-report section on the audit page. */
-.audit-teaser {
-  margin-top: 48px;
+/* ===================== Audit CTA blocks (sprinkled secondary CTAs) =====================
+   Secondary route into the free-audit page for visitors who wouldn't click the
+   main "Get My Free Marketing Audit" button but are curious what's inside it.
+
+   Structured as a standalone CTA block (bold line on its own row + a real
+   button beneath it), NOT a link buried inside a sentence. The first version
+   was a question with an inline arrow-link inside a <p>, which read as body
+   copy and wrapped badly on mobile. This follows the same shape as the NYWT
+   landing page's "Call For Instant Pricing!" + [Call Now] pattern. */
+.audit-cta {
+  margin-top: 56px;
   text-align: center;
-  font-size: 19px;
-  line-height: 1.6;
 }
 
-.audit-teaser-link {
+.audit-cta-line {
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #ffffff;
+  margin-bottom: 18px;
+  /* keeps the line breaking at a sensible width instead of running edge to
+     edge on tablet widths */
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.audit-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-size: 20px;
-  font-weight: 700;
+  justify-content: center;
+  gap: 8px;
+  padding: 15px 32px;
+  border-radius: 999px;
+  border: 2px solid var(--color-green);
+  background: transparent;
   color: var(--color-green-bright);
+  font-size: 16px;
+  font-weight: 700;
   text-decoration: none;
-  border-bottom: 2px solid rgba(212, 222, 107, 0.35);
-  padding-bottom: 2px;
-  transition: color 0.25s ease, border-color 0.25s ease, gap 0.25s ease;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.15s ease, box-shadow 0.25s ease;
 }
 
-.audit-teaser-link:hover {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.6);
-  gap: 11px;
+.audit-cta-btn:hover {
+  background: var(--color-green);
+  color: #0a0a0a;
+  transform: translateY(-2px);
+  box-shadow: 0 0 24px rgba(188, 208, 68, 0.35);
 }
 
-.audit-teaser-link .arrow {
+.audit-cta-btn .arrow {
   transition: transform 0.25s ease;
 }
 
-.audit-teaser-link:hover .arrow {
+.audit-cta-btn:hover .arrow {
   transform: translateX(3px);
 }
 
-/* Light-background variant — What I Do sits on the cream section */
-.audit-teaser-link.on-light {
-  color: var(--color-green-deep);
-  border-bottom-color: rgba(125, 143, 46, 0.4);
-}
-
-.audit-teaser-link.on-light:hover {
+/* Light-background variant — What I Do sits on the cream section, where the
+   standard yellow-green has almost no contrast. */
+.audit-cta.on-light .audit-cta-line {
   color: var(--color-ink);
-  border-color: var(--color-ink);
 }
 
-/* Inline variant for the Process section's "Discovery & Audit" card — sits
-   inside a compact card, so no centering/top margin, just a small follow-on
-   line under the card's own body copy. */
-.process-audit-link {
-  margin-top: 14px;
+.audit-cta.on-light .audit-cta-btn {
+  border-color: var(--color-green-deep);
+  color: var(--color-green-deep);
 }
 
-/* Card context is compact — dial the shared link size down from 20px so it
-   doesn't overpower the card, while still reading bigger than the 14px
-   card body copy around it. */
-.process-audit-link .audit-teaser-link {
-  font-size: 17px;
+.audit-cta.on-light .audit-cta-btn:hover {
+  background: var(--color-green-deep);
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(125, 143, 46, 0.3);
+}
+
+/* Compact variant for the Process section's "Discovery & Audit" card — the
+   card already supplies its own heading/body as the lead-in, so no CTA line
+   here, just the button, left-aligned to the card's own text. */
+.audit-cta-inline {
+  margin-top: 18px;
+}
+
+.audit-cta-inline .audit-cta-btn {
+  padding: 11px 22px;
+  font-size: 14px;
+  border-width: 1px;
+}
+
+@media (max-width: 600px) {
+  .audit-cta {
+    margin-top: 44px;
+  }
+
+  /* Full-width tap target on phones — this is where the old inline-link
+     version read worst. */
+  .audit-cta-btn {
+    display: flex;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 16px 22px;
+  }
+
+  .audit-cta-inline .audit-cta-btn {
+    max-width: none;
+  }
 }
 
 /* ===================== Projects (dark section) ===================== */

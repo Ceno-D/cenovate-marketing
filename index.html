@@ -23,7 +23,7 @@
   <!-- ?v= cache-buster — styles.css never had one until now, which is why the
        Projects grid silently failed to update in the browser despite the
        server having the correct CSS. Bump this number on every future CSS edit. -->
-  <link rel="stylesheet" href="css/styles.css?v=36" />
+  <link rel="stylesheet" href="css/styles.css?v=37" />
   <!-- Spline viewer runtime: embedding via public share link/iframe, not self-hosted code export.
        Danny upgraded his app.spline.design plan 2026-08-12 to remove the Spline watermark
        (Starter, ~$12-15/mo). Watermark visibility is controlled server-side by Spline based on
@@ -77,7 +77,11 @@
     </nav>
 
     <div class="hero-content">
-      <h1 class="hero-headline">Stop Waiting for Customers.<br />Show Up Where They're Already <span class="accent-word">Searching</span>.</h1>
+      <!-- &nbsp; before the accent word keeps "Already Searching." from breaking
+           so "Searching." can never land alone on its own line (no one-word
+           lines rule). text-wrap:balance alone can't guarantee it here because
+           the hard <br /> splits this into two separately-balanced segments. -->
+      <h1 class="hero-headline">Stop Waiting for Customers.<br />Show Up Where They're Already&nbsp;<span class="accent-word">Searching</span>.</h1>
       <p class="hero-subhead">
         Your customers are searching Google, Maps, and AI tools like ChatGPT before they
         ever call. I build the websites, content, and campaigns that make sure they find you first.
@@ -165,7 +169,7 @@
       <div class="service-grid-item">
         <div class="service-grid-text">
           <h4>AI Implementation</h4>
-          <p>Speed-to-lead systems that respond before your competitor sees the notification.</p>
+          <p>Speed-to-lead systems that respond before your competitor sees the&nbsp;notification.</p>
         </div>
         <svg class="grid-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
           <!-- gear ring: 6 chunky teeth, sized to stay legible at 34px render size -->
@@ -196,7 +200,7 @@
       <div class="service-grid-item">
         <div class="service-grid-text">
           <h4>Landing Page Design</h4>
-          <p>Single-offer pages built for one campaign, one goal, no distractions.</p>
+          <p>Single-offer pages built for one campaign, one goal, no&nbsp;distractions.</p>
         </div>
         <svg class="grid-icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
           <!-- browser window with a cursor-click accent, matching the reference concept -->
@@ -213,7 +217,10 @@
       </div>
     </div>
 
-    <p class="audit-teaser">Not sure where you're losing customers? <a class="audit-teaser-link on-light" href="/free-audit?src=what-i-do#whats-included">See exactly what I check in a free audit <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
+    <div class="audit-cta on-light">
+      <p class="audit-cta-line">Find Out What's Costing You Customers.</p>
+      <a class="audit-cta-btn" href="/free-audit?src=what-i-do#whats-included">See What's Included <span class="arrow" aria-hidden="true">&rarr;</span></a>
+    </div>
   </section>
 
   <!-- ===================== THE REAL PROBLEM ===================== -->
@@ -357,7 +364,10 @@
       </div>
     </div>
 
-    <p class="audit-teaser">Curious how your own business stacks up? <a class="audit-teaser-link" href="/free-audit?src=projects#whats-included">See a sample audit report <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
+    <div class="audit-cta">
+      <p class="audit-cta-line">See How Your Business Stacks Up.</p>
+      <a class="audit-cta-btn" href="/free-audit?src=projects#whats-included">View a Sample Audit <span class="arrow" aria-hidden="true">&rarr;</span></a>
+    </div>
   </section>
 
   <!-- ===================== TECHNICAL SKILL / CREATIVE INSTINCT ===================== -->
@@ -431,7 +441,9 @@
           <h3>Discovery &amp; Audit</h3>
           <p class="process-label">Where I Start</p>
           <p class="process-body">I dig deep into your current presence, competitors, and real market opportunity, so I know exactly where the growth is hiding before I touch anything.</p>
-          <p class="process-audit-link"><a class="audit-teaser-link" href="/free-audit?src=process-step1#whats-included">See what's inside a free audit <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
+          <div class="audit-cta-inline">
+            <a class="audit-cta-btn" href="/free-audit?src=process-step1#whats-included">See What's Included <span class="arrow" aria-hidden="true">&rarr;</span></a>
+          </div>
         </div>
         <div class="process-card process-card-gray">
           <p class="process-num">02</p>
