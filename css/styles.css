@@ -754,15 +754,31 @@ figcaption,
 
 /* Compact variant for the Process section's "Discovery & Audit" card — the
    card already supplies its own heading/body as the lead-in, so no CTA line
-   here, just the button, left-aligned to the card's own text. */
+   here. Deliberately NOT a pill: inside an already-bordered card a second
+   bordered box reads as a box-in-a-box, so this one is a plain text + arrow
+   link, left-aligned to the card's own copy. */
 .audit-cta-inline {
-  margin-top: 18px;
+  margin-top: 16px;
+  text-align: left;
 }
 
 .audit-cta-inline .audit-cta-btn {
-  padding: 11px 22px;
-  font-size: 14px;
-  border-width: 1px;
+  display: inline-flex;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: 15px;
+}
+
+.audit-cta-inline .audit-cta-btn:hover {
+  background: transparent;
+  color: #ffffff;
+  transform: none;
+  box-shadow: none;
 }
 
 @media (max-width: 600px) {
@@ -771,17 +787,15 @@ figcaption,
   }
 
   /* Full-width tap target on phones — this is where the old inline-link
-     version read worst. */
+     version read worst. Does NOT apply to .audit-cta-inline (the Process
+     card's plain text link), which stays inline/left-aligned at every width;
+     its own two-class rules above already outrank this on specificity. */
   .audit-cta-btn {
     display: flex;
     width: 100%;
     max-width: 340px;
     margin: 0 auto;
     padding: 16px 22px;
-  }
-
-  .audit-cta-inline .audit-cta-btn {
-    max-width: none;
   }
 }
 
