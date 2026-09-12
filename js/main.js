@@ -30,10 +30,6 @@ console.log('Cenovate Marketing site loaded.');
   });
 })();
 
-// Real Problem's cursor-follow effect is now the actual Spline smoke-particle
-// scene (embedded iframe, self-contained) — the earlier CSS/JS glow
-// approximation has been removed in favor of it.
-
 // ===================== Projects: hover-to-play reel cards =====================
 // Videos are large (30-60MB each) — preload="none" means nothing downloads
 // until a card is actually hovered, and the src is only ever set once per

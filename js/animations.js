@@ -38,18 +38,49 @@
   }
 
   // ===================== Hero: on-load entrance, not scroll-triggered =====================
-  // The first thing visible on the page — should feel immediate, not wait
-  // for a scroll trigger that hasn't happened yet.
-  gsap.from('.hero-headline', { opacity: 0, y: 24, duration: 0.9, ease: EASE, delay: 0.15 });
-  gsap.from('.hero-subhead', { opacity: 0, y: 18, duration: 0.8, ease: EASE, delay: 0.4 });
-  gsap.from('.hero-ctas .btn', {
-    opacity: 0,
-    y: 14,
-    duration: 0.7,
-    ease: EASE,
-    stagger: 0.12,
-    delay: 0.55,
-  });
+  // Built as a PAUSED timeline and started only once the page can actually
+  // paint it (see below). Previously these were bare gsap.from() calls that
+  // fired the instant this file executed — but GSAP animates in real time
+  // regardless of whether anything has painted yet, so on a cold load (Spline
+  // iframe + GSAP CDN + web fonts all in flight) the entire ~1.25s sequence
+  // burned through before first meaningful paint. Net effect: the headline
+  // looked like it never animated at all, and the rest flashed past.
+  //
+  // The .from() tweens still apply their start state immediately on creation
+  // even while paused, so the content is hidden from the very first frame —
+  // no flash of un-animated text before the timeline is released.
+  const heroTl = gsap.timeline({ paused: true });
+
+  heroTl
+    .from('.hero-headline', { opacity: 0, y: 34, duration: 1.2, ease: EASE })
+    .from('.hero-subhead', { opacity: 0, y: 24, duration: 1.0, ease: EASE }, '-=0.75')
+    .from('.hero-ctas .btn', {
+      opacity: 0,
+      y: 18,
+      duration: 0.85,
+      ease: EASE,
+      stagger: 0.14,
+    }, '-=0.6');
+
+  // Release the timeline once web fonts have loaded (the headline uses a
+  // gradient background-clip:text fill plus the Playfair accent word, so it
+  // genuinely cannot paint correctly until fonts resolve) and then on the next
+  // animation frame, so frame one of the tween is a frame the user can see.
+  let heroStarted = false;
+  function startHero() {
+    if (heroStarted) return;
+    heroStarted = true;
+    requestAnimationFrame(() => heroTl.play());
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(startHero);
+  } else {
+    startHero();
+  }
+  // Safety net: never leave the hero stuck hidden if fonts.ready stalls or
+  // never settles (blocked font CDN, odd browser). Whichever fires first wins.
+  setTimeout(startHero, 1500);
 
   // ===================== What I Do: cards rise, grid slides in from the side =====================
   // Two different motions for the two different card treatments already

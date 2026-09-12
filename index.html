@@ -11,10 +11,19 @@
   <!-- Playfair Display: italic serif accent font for the headline's gradient word,
        matching the Growaz-inspired bold-sans + italic-serif contrast treatment -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet" />
+  <!-- Start DNS + TLS handshakes for the hero Spline scene and the GSAP CDN while
+       the HTML is still parsing, instead of waiting until the iframe/script tags
+       are reached further down. Saves a few hundred ms on the hero background,
+       which was the slowest thing on the page to appear. -->
+  <link rel="preconnect" href="https://my.spline.design" crossorigin />
+  <link rel="preconnect" href="https://prod.spline.design" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="dns-prefetch" href="https://my.spline.design" />
+  <link rel="dns-prefetch" href="https://prod.spline.design" />
   <!-- ?v= cache-buster — styles.css never had one until now, which is why the
        Projects grid silently failed to update in the browser despite the
        server having the correct CSS. Bump this number on every future CSS edit. -->
-  <link rel="stylesheet" href="css/styles.css?v=35" />
+  <link rel="stylesheet" href="css/styles.css?v=36" />
   <!-- Spline viewer runtime: embedding via public share link/iframe, not self-hosted code export.
        Danny upgraded his app.spline.design plan 2026-08-12 to remove the Spline watermark
        (Starter, ~$12-15/mo). Watermark visibility is controlled server-side by Spline based on
@@ -38,6 +47,8 @@
         class="hero-bg-iframe"
         src="https://my.spline.design/motiontrails-WrYr5wGaNfCsySFhzAUGoraP/?v=3"
         frameborder="0"
+        loading="eager"
+        fetchpriority="high"
         title="Cenovate hero background animation"
       ></iframe>
     </div>
@@ -72,7 +83,7 @@
         ever call. I build the websites, content, and campaigns that make sure they find you first.
       </p>
       <div class="hero-ctas">
-        <a href="/free-audit?src=hero" class="btn btn-primary">Get My Free Marketing Audit</a>
+        <a href="/free-audit?src=hero" class="btn btn-primary btn-pulse">Get My Free Marketing Audit</a>
         <a href="#projects" class="btn btn-outline">
           <span class="btn-outline-glow"></span>
           See My Work
@@ -87,19 +98,15 @@
       <div class="ticker-set">
         <span>One Person, Powered by AI</span><span class="ticker-dot">&middot;</span>
         <span>Half the Price of an Agency</span><span class="ticker-dot">&middot;</span>
-        <span>Real Work, Not Stock Content</span><span class="ticker-dot">&middot;</span>
         <span>Direct Access, Every Time</span><span class="ticker-dot">&middot;</span>
-        <span>Built for Google, GEO &amp; Beyond</span><span class="ticker-dot">&middot;</span>
-        <span>No Account Managers, No Middlemen</span><span class="ticker-dot">&middot;</span>
+        <span>Ranks on Google. Shows Up in AI.</span><span class="ticker-dot">&middot;</span>
         <span>Elevate. Innovate. Cenovate.</span><span class="ticker-dot">&middot;</span>
       </div>
       <div class="ticker-set" aria-hidden="true">
         <span>One Person, Powered by AI</span><span class="ticker-dot">&middot;</span>
         <span>Half the Price of an Agency</span><span class="ticker-dot">&middot;</span>
-        <span>Real Work, Not Stock Content</span><span class="ticker-dot">&middot;</span>
         <span>Direct Access, Every Time</span><span class="ticker-dot">&middot;</span>
-        <span>Built for Google, GEO &amp; Beyond</span><span class="ticker-dot">&middot;</span>
-        <span>No Account Managers, No Middlemen</span><span class="ticker-dot">&middot;</span>
+        <span>Ranks on Google. Shows Up in AI.</span><span class="ticker-dot">&middot;</span>
         <span>Elevate. Innovate. Cenovate.</span><span class="ticker-dot">&middot;</span>
       </div>
     </div>
@@ -110,7 +117,7 @@
     <div class="section-header">
       <p class="eyebrow eyebrow-dark">WHAT I DO</p>
       <h2 class="section-title-dark">Full Marketing Services. One Person Behind All of It.</h2>
-      <p class="section-subhead-dark">No account managers, no juniors touching your account. Every deliverable comes from me, directly.</p>
+      <p class="section-subhead-dark">Faster turnarounds, consistent quality, and someone who actually dedicates himself to knowing your business.</p>
     </div>
 
     <div class="service-cards-primary">
@@ -205,32 +212,24 @@
         </svg>
       </div>
     </div>
+
+    <p class="audit-teaser">Not sure where you're losing customers? <a class="audit-teaser-link on-light" href="/free-audit?src=what-i-do#whats-included">See exactly what I check in a free audit <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
   </section>
 
   <!-- ===================== THE REAL PROBLEM ===================== -->
   <section class="real-problem" id="real-problem">
-    <!-- Real particle-based smoke trail (Spline scene, recolored + hover-only,
-         no visible cursor sphere) — replaces the earlier CSS-only glow approx.
-         ?v=3 cache-buster bumped 2026-08-12 after Danny upgraded his
-         app.spline.design plan, to force a fresh (non-watermarked) render. -->
-    <iframe
-      class="rp-smoke-iframe"
-      src="https://my.spline.design/colorfulsmokemousefolloweffect-KSp7Fenu68BlJSw7y7PpcNWr/?v=3"
-      frameborder="0"
-      title="Cursor smoke trail effect"
-    ></iframe>
-    <!-- Gradient sits ABOVE the iframe (which paints its own opaque black),
-         as a translucent tint rather than the section's own background —
-         otherwise the iframe hides it completely. pointer-events:none so
-         the smoke underneath still receives the cursor. -->
+    <!-- Green radial/linear wash tint over the section's own black background.
+         (Previously sat above a Spline mouse-follow smoke iframe here —
+         removed 2026-09-11, Danny didn't see the point of it. The gradient
+         alone still gives the section its glow.) -->
     <div class="rp-gradient-overlay" aria-hidden="true"></div>
     <div class="real-problem-inner">
       <p class="eyebrow">THE REAL PROBLEM</p>
-      <h2 class="rp-headline">Referrals Built Your Business. They Won't Grow It.</h2>
-      <p class="rp-body">Word of mouth is the best lead you'll ever get, but it's also the one you control the least. It only shows up on its own schedule, not yours.</p>
-      <p class="rp-body">Meanwhile, the customer who doesn't already know you is Googling you, checking your reviews, and now asking ChatGPT and Google's AI Overviews who's actually good at what you do, all before they ever pick up the phone. If you're not showing up in those places, the referral you're waiting on doesn't matter. You don't exist to everyone else.</p>
+      <h2 class="rp-headline">Your Next Customer Is Already Comparing You.</h2>
+      <p class="rp-body">They are looking at your website, your reviews, your competitors, and what Google and AI say about your business. Every missing answer gives them a reason to keep looking.</p>
+      <p class="rp-body">Strong marketing makes the choice easier. It puts your business in front of the right people and gives them enough confidence to take the next step.</p>
       <div class="rp-divider"></div>
-      <p class="rp-closing">If your best month and your worst month are six weeks apart, the problem isn't your work. It's that nobody can find it.</p>
+      <p class="rp-closing">The problem isn't the quality of your work. It's how little of that quality customers can see before they call.</p>
       <div class="rp-cta-glow">
         <a href="/free-audit?src=real-problem" class="rp-cta-btn">Get My Free Marketing Audit</a>
       </div>
@@ -240,7 +239,7 @@
   <!-- ===================== PROJECTS ===================== -->
   <section class="projects" id="projects">
     <div class="section-header">
-      <p class="eyebrow">REAL WORK. REAL BUSINESSES. NO STOCK PHOTOS.</p>
+      <p class="eyebrow">REAL WORK. REAL BUSINESSES.</p>
       <h2 class="section-title-light">Content that builds trust. Sites that build credibility. Proof you can watch for yourself.</h2>
     </div>
 
@@ -332,30 +331,33 @@
       </div>
     </div>
 
-    <p class="sites-strip-label">WEBSITES I'VE BUILT</p>
+    <p class="sites-strip-label">LIVE SITES &amp; LANDING PAGES</p>
     <div class="sites-strip">
       <a class="site-shot" href="https://www.parkwaycarstereo.net/" target="_blank" rel="noopener">
         <div class="site-shot-images">
-          <img src="assets/sites/parkway-site.png?v=2" alt="Parkway Car Stereo website hero section" />
-          <img src="assets/sites/parkway-site-2.png?v=2" alt="Parkway Car Stereo website — What's the next upgrade your ride deserves section" />
+          <img src="assets/sites/parkway-site.png?v=4" alt="Parkway Car Stereo website hero section with LED lighting install" />
+          <img src="assets/sites/parkway-site-2.png?v=5" alt="Parkway Car Stereo website — What's the next upgrade your ride deserves section" />
         </div>
         <span>Parkway Car Stereo</span>
       </a>
       <a class="site-shot" href="https://windowtint.newyorkwindowtinting.com/" target="_blank" rel="noopener">
         <div class="site-shot-images">
-          <img src="assets/sites/nywindowtinting-site.png?v=3" alt="NY Window Tinting before &amp; after tint comparison section" />
-          <img src="assets/sites/nywindowtinting-site-2.png?v=1" alt="NY Window Tinting choose your darkness shade picker section" />
+          <img src="assets/sites/nywindowtinting-site.png?v=5" alt="NY Window Tinting PMax landing page hero section with lead form" />
+          <img src="assets/sites/nywindowtinting-site-2.png?v=5" alt="NY Window Tinting — Long Island's family-owned tint shop section" />
         </div>
+        <span class="site-shot-tag">High-Converting Google Ads Landing Page</span>
         <span>NY Window Tinting</span>
       </a>
       <div class="site-shot site-shot-static">
         <div class="site-shot-images">
-          <img src="assets/sites/mediquip-site.png?v=2" alt="Mediquip Homecare/DME website hero section" />
-          <img src="assets/sites/mediquip-site-2.png?v=1" alt="Mediquip Homecare/DME compassion, reliability, expertise section" />
+          <img src="assets/sites/mediquip-site.png?v=3" alt="Mediquip Homecare/DME website hero section" />
+          <img src="assets/sites/mediquip-site-2.png?v=2" alt="Mediquip Homecare/DME — Trusted Durable Medical Equipment & Respiratory Solutions section" />
         </div>
         <span>Mediquip Homecare/DME</span>
       </div>
     </div>
+
+    <p class="audit-teaser">Curious how your own business stacks up? <a class="audit-teaser-link" href="/free-audit?src=projects#whats-included">See a sample audit report <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
   </section>
 
   <!-- ===================== TECHNICAL SKILL / CREATIVE INSTINCT ===================== -->
@@ -429,6 +431,7 @@
           <h3>Discovery &amp; Audit</h3>
           <p class="process-label">Where I Start</p>
           <p class="process-body">I dig deep into your current presence, competitors, and real market opportunity, so I know exactly where the growth is hiding before I touch anything.</p>
+          <p class="process-audit-link"><a class="audit-teaser-link" href="/free-audit?src=process-step1#whats-included">See what's inside a free audit <span class="arrow" aria-hidden="true">&rarr;</span></a></p>
         </div>
         <div class="process-card process-card-gray">
           <p class="process-num">02</p>
@@ -546,7 +549,7 @@
         <h2 class="final-cta-headline">When Someone <span class="accent-word final-cta-accent">Googles</span> You Tonight, What Do They Find?</h2>
         <p class="final-cta-body">Let's face it: marketing is tough. There are a lot of moving parts, and it's hard to know where to actually focus. In your free audit, I'll show you exactly where you show up when people nearby search for what you do, how you stack up against the businesses next door, and where you're leaving money on the table. No cost, no obligation.</p>
         <p class="final-cta-closer">No one is going to obsess over your success as much as I do.</p>
-        <a href="/free-audit?src=final-cta" class="btn btn-primary final-cta-btn">Get My Free Marketing Audit</a>
+        <a href="/free-audit?src=final-cta" class="btn btn-primary final-cta-btn btn-pulse">Get My Free Marketing Audit</a>
       </div>
   </section>
 
@@ -564,6 +567,7 @@
       <div class="footer-col">
         <p class="footer-col-label">QUICK LINKS</p>
         <nav class="footer-links">
+          <a href="/free-audit?src=footer-quicklinks">Free Audit</a>
           <a href="#services">Services</a>
           <a href="#projects">Projects</a>
           <a href="#process">Process</a>
@@ -591,8 +595,8 @@
        the right way to bring it in (framework-agnostic, drop-in <script>). -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="js/animations.js?v=1"></script>
-  <script src="js/main.js?v=8"></script>
+  <script src="js/animations.js?v=2"></script>
+  <script src="js/main.js?v=9"></script>
 </body>
 </html>
 <!-- auto-deploy test 20260828T103616Z -->

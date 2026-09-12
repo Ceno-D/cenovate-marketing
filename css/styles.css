@@ -305,6 +305,39 @@ a {
   transform: translateY(-2px);
 }
 
+/* Attention pulse for the two main "Get My Free Marketing Audit" buttons
+   (hero + The Free Audit section). Deliberately an expanding shadow ring
+   rather than a scale() pulse: .btn-primary:hover already owns transform
+   (translateY(-2px)), and a transform-based keyframe would override the
+   hover lift while running. Shadow-only keeps both effects independent.
+   Pauses on hover so the hover state reads cleanly once engaged. */
+@keyframes cta-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(188, 208, 68, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(188, 208, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(188, 208, 68, 0);
+  }
+}
+
+.btn-pulse {
+  animation: cta-pulse 2.2s ease-out infinite;
+}
+
+.btn-pulse:hover {
+  animation-play-state: paused;
+  box-shadow: 0 0 28px 6px rgba(188, 208, 68, 0.45);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-pulse {
+    animation: none;
+  }
+}
+
 .btn-outline {
   position: relative;
   background: transparent;
@@ -527,39 +560,25 @@ a {
 .real-problem {
   position: relative;
   overflow: hidden;
-  background: #000000; /* fallback only — the iframe covers this entirely once loaded */
+  background: #000000;
   padding: 130px 24px;
   text-align: center;
 }
 
-/* Real smoke-trail Spline embed. NOT pointer-events:none — this one actually
-   needs to receive the mouse to track it (unlike the hero background, which
-   only needed to look right, not respond to input). It'll only "see" the
-   cursor over empty space not covered by the text content above it (z-index),
-   same limitation the OC reference has around its own heading/button. */
-.rp-smoke-iframe {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  z-index: 0;
-  background: transparent;
-}
-
-/* Sits ABOVE the iframe (which paints its own opaque black) as a translucent
-   tint — this is what actually creates the visible top-to-bottom wash, since
-   anything painted into .real-problem's own background is hidden by the
-   iframe. Uses rgba (not solid colors) specifically so it reads as a tint
-   over the smoke/black beneath it, not a replacement for it. */
+/* Translucent green tint over .real-problem's own black background — this is
+   what creates the visible top-to-bottom wash. (Previously layered above a
+   Spline mouse-follow smoke iframe, removed 2026-09-11; the gradient was
+   always what actually produced the glow, so it stands fine on its own.) */
 .rp-gradient-overlay {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  /* Bottom stop (0.22 at 100%) washes back up toward Projects' top wash below
+     it, same seam-blend technique as Free Audit → Footer. */
   background:
     radial-gradient(ellipse 55% 35% at 50% 8%, rgba(188, 208, 68, 0.28) 0%, rgba(188, 208, 68, 0) 70%),
-    linear-gradient(180deg, rgba(188, 208, 68, 0.55) 0%, rgba(188, 208, 68, 0.22) 30%, rgba(188, 208, 68, 0) 65%);
+    linear-gradient(180deg, rgba(188, 208, 68, 0.55) 0%, rgba(188, 208, 68, 0.22) 30%, rgba(188, 208, 68, 0) 65%, rgba(188, 208, 68, 0.22) 100%);
 }
 
 .real-problem-inner {
@@ -567,12 +586,6 @@ a {
   z-index: 2;
   max-width: 760px;
   margin: 0 auto;
-  /* lets mousemove pass straight through to the smoke iframe underneath —
-     without this, hovering over the text "blocks" the cursor from the
-     Spline scene since the browser only delivers events to the topmost
-     element. Tradeoff: this text isn't mouse-selectable anymore, which is
-     an acceptable trade for a decorative section with no links/buttons. */
-  pointer-events: none;
 }
 
 .real-problem .eyebrow {
@@ -612,11 +625,77 @@ a {
   color: #ffffff;
 }
 
+/* ===================== Audit teaser links (sprinkled secondary CTAs) =====================
+   Softer than the main "Get My Free Marketing Audit" buttons — for visitors
+   who wouldn't click a big CTA but are curious what the audit contains.
+   Deep-links to the checklist/sample-report section on the audit page. */
+.audit-teaser {
+  margin-top: 48px;
+  text-align: center;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.audit-teaser-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-green-bright);
+  text-decoration: none;
+  border-bottom: 2px solid rgba(212, 222, 107, 0.35);
+  padding-bottom: 2px;
+  transition: color 0.25s ease, border-color 0.25s ease, gap 0.25s ease;
+}
+
+.audit-teaser-link:hover {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.6);
+  gap: 11px;
+}
+
+.audit-teaser-link .arrow {
+  transition: transform 0.25s ease;
+}
+
+.audit-teaser-link:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* Light-background variant — What I Do sits on the cream section */
+.audit-teaser-link.on-light {
+  color: var(--color-green-deep);
+  border-bottom-color: rgba(125, 143, 46, 0.4);
+}
+
+.audit-teaser-link.on-light:hover {
+  color: var(--color-ink);
+  border-color: var(--color-ink);
+}
+
+/* Inline variant for the Process section's "Discovery & Audit" card — sits
+   inside a compact card, so no centering/top margin, just a small follow-on
+   line under the card's own body copy. */
+.process-audit-link {
+  margin-top: 14px;
+}
+
+/* Card context is compact — dial the shared link size down from 20px so it
+   doesn't overpower the card, while still reading bigger than the 14px
+   card body copy around it. */
+.process-audit-link .audit-teaser-link {
+  font-size: 17px;
+}
+
 /* ===================== Projects (dark section) ===================== */
 .projects {
   position: relative;
   overflow: hidden;
   background:
+    /* top wash — merges with The Real Problem section's bottom wash into one
+       continuous glow at the seam, same technique as Free Audit → Footer. */
+    linear-gradient(180deg, rgba(188, 208, 68, 0.22) 0%, rgba(188, 208, 68, 0) 16%),
     /* second glow sitting in the gap between the reel cards and the site
        screenshot strip, so the two rows feel bridged rather than two
        disconnected blocks sitting on flat black */
@@ -878,6 +957,23 @@ a {
   background: #0a0a0a;
 }
 
+/* Optional badge line above the site name — used to call out a specific
+   result/claim (e.g. "High-Converting Google Ads Landing Page") without
+   disturbing the existing single-span layout for cards that don't need it. */
+.site-shot-tag {
+  padding: 10px 14px 0 !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-accent, #bcd044) !important;
+  background: #0a0a0a !important;
+}
+
+.site-shot-tag + span {
+  padding-top: 2px;
+}
+
 @media (max-width: 900px) {
   .project-cards {
     grid-template-columns: 1fr;
@@ -891,10 +987,6 @@ a {
 .rp-cta-glow {
   position: relative;
   display: inline-block;
-  /* .real-problem-inner (parent) has pointer-events:none so the smoke effect
-     can track the cursor through the text — re-enable it here specifically
-     so the button is actually clickable/hoverable. */
-  pointer-events: auto;
   border-radius: 14px;
   padding: 3px;
   margin-top: 40px;
