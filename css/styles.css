@@ -1119,6 +1119,47 @@ figcaption,
   padding-top: 2px;
 }
 
+/* Footer row for cards that also carry a "Current Client" badge — same
+   background/padding as the plain single-span footer above, but laid out
+   as a flex row so the badge sits inline with the site name instead of
+   stacking into its own block. */
+.site-shot-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 14px 12px;
+  background: #0a0a0a;
+}
+
+.site-shot-foot span:first-child {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.client-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #86e29b;
+  white-space: nowrap;
+}
+
+.client-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
+}
+
 @media (max-width: 900px) {
   .project-cards {
     grid-template-columns: 1fr;
