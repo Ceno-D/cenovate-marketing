@@ -1003,6 +1003,40 @@ figcaption,
   color: #ffffff;
 }
 
+/* Instagram profile link — only present on cards where the client has an
+   active IG account we want to point to (not every reel card has one).
+   Parent .project-overlay is pointer-events:none so text doesn't block the
+   video hover/click area; this re-enables pointer events just for itself. */
+.project-ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  pointer-events: auto;
+  width: fit-content;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.project-ig-link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.project-ig-link:hover {
+  background: var(--color-green-bright);
+  border-color: var(--color-green-bright);
+  color: #000000;
+}
+
 /* --- Site screenshot strip --- */
 .sites-strip-label {
   text-align: center;
