@@ -1132,17 +1132,27 @@ figcaption,
   background: #0a0a0a;
 }
 
-.site-shot-foot span:first-child {
+/* .site-shot span (generic rule above) sets display:block + its own
+   14px/12px padding on every span inside .site-shot, including these two -
+   left uncorrected that stacks a second 14px inset on top of this row's
+   own padding, pushing the site name ~14px further right than the tag
+   text above it. Reset explicitly so both rows share one text baseline. */
+.site-shot-foot > span:first-child {
+  display: block;
+  padding: 0;
+  background: transparent;
   font-size: 13px;
   font-weight: 600;
   color: var(--color-text-muted);
 }
 
-.client-badge {
+.site-shot-foot .client-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   flex-shrink: 0;
+  padding: 0;
+  background: transparent;
   font-size: 10px;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -1151,7 +1161,7 @@ figcaption,
   white-space: nowrap;
 }
 
-.client-badge::before {
+.site-shot-foot .client-badge::before {
   content: "";
   width: 6px;
   height: 6px;
