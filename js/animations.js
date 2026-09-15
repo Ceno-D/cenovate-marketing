@@ -141,6 +141,24 @@
     scrollTrigger: scrollDefaults('.sites-strip'),
   });
 
+  // ===================== New business offer: copy leads, scope follows =====================
+  gsap.from('.startup-copy > *', {
+    opacity: 0,
+    x: -28,
+    duration: 0.65,
+    ease: EASE,
+    stagger: 0.09,
+    scrollTrigger: scrollDefaults('.startup-section'),
+  });
+  gsap.from('.startup-point', {
+    opacity: 0,
+    x: 28,
+    duration: 0.65,
+    ease: EASE,
+    stagger: 0.12,
+    scrollTrigger: scrollDefaults('.startup-points'),
+  });
+
   // ===================== Why It Takes Both: the two cards converge from opposite sides =====================
   // Matches the actual concept of the section (two different strengths
   // meeting in the middle) instead of a generic fade.
