@@ -1003,6 +1003,40 @@ figcaption,
   color: #ffffff;
 }
 
+/* Instagram profile link — only present on cards where the client has an
+   active IG account we want to point to (not every reel card has one).
+   Parent .project-overlay is pointer-events:none so text doesn't block the
+   video hover/click area; this re-enables pointer events just for itself. */
+.project-ig-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  pointer-events: auto;
+  width: fit-content;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.project-ig-link svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.project-ig-link:hover {
+  background: var(--color-green-bright);
+  border-color: var(--color-green-bright);
+  color: #000000;
+}
+
 /* --- Site screenshot strip --- */
 .sites-strip-label {
   text-align: center;
@@ -1252,6 +1286,57 @@ figcaption,
   .startup-cta-btn {
     width: 100%;
   }
+}
+
+/* Footer row for cards that also carry a "Current Client" badge — same
+   background/padding as the plain single-span footer above, but laid out
+   as a flex row so the badge sits inline with the site name instead of
+   stacking into its own block. */
+.site-shot-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 2px 14px 12px;
+  background: #0a0a0a;
+}
+
+/* .site-shot span (generic rule above) sets display:block + its own
+   14px/12px padding on every span inside .site-shot, including these two -
+   left uncorrected that stacks a second 14px inset on top of this row's
+   own padding, pushing the site name ~14px further right than the tag
+   text above it. Reset explicitly so both rows share one text baseline. */
+.site-shot-foot > span:first-child {
+  display: block;
+  padding: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.site-shot-foot .client-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 0;
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #86e29b;
+  white-space: nowrap;
+}
+
+.site-shot-foot .client-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4ade80;
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
 }
 
 @media (max-width: 900px) {
