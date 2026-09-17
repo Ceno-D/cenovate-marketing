@@ -14,6 +14,17 @@ const AIRTABLE_TABLE_ID = 'tbl8r8lS3hbRNE01w';
 const NOTIFY_TO = 'dsbriceno42008@gmail.com';
 const ALLOWED_SOURCES = ['nav', 'hero', 'real-problem', 'final-cta', 'direct'];
 
+const MAX_FIELD_LENGTH = 500;
+const MAX_EMAIL_LENGTH = 254;
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Best-effort burst cap for this function instance. Durable protection
+// against distributed floods should come from Vercel Firewall rate limiting;
+// this stops simple same-instance spam bursts from reaching Airtable/Resend.
+const RATE_WINDOW_MS = 60 * 1000;
+const RATE_MAX_SUBMITS = 5;
+let recentSubmissions = [];
+
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -53,6 +64,25 @@ module.exports = async function handler(req, res) {
   if (phone && !consent) {
     return res.status(400).json({ error: 'Consent is required when providing a phone number' });
   }
+  if (!EMAIL_PATTERN.test(email) || email.length > MAX_EMAIL_LENGTH) {
+    return res.status(400).json({ error: 'A valid email address is required' });
+  }
+  if (
+    contactName.length > MAX_FIELD_LENGTH ||
+    businessName.length > MAX_FIELD_LENGTH ||
+    location.length > MAX_FIELD_LENGTH ||
+    website.length > MAX_FIELD_LENGTH ||
+    phone.length > MAX_FIELD_LENGTH
+  ) {
+    return res.status(400).json({ error: 'One or more fields are too long' });
+  }
+
+  const nowMs = Date.now();
+  recentSubmissions = recentSubmissions.filter(ts => nowMs - ts < RATE_WINDOW_MS);
+  if (recentSubmissions.length >= RATE_MAX_SUBMITS) {
+    return res.status(429).json({ error: 'Too many requests. Please try again in a minute.' });
+  }
+  recentSubmissions.push(nowMs);
 
   const now = new Date();
   const fields = {
