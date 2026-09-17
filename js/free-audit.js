@@ -39,6 +39,8 @@
       phone: phoneInput.value.trim(),
       consent: consentCheckbox.checked,
       source: getSource(),
+      // Honeypot — always empty for real users; only bots fill the hidden field.
+      companyWebsite: document.getElementById('audit-company').value,
     };
 
     if (!payload.contactName || !payload.businessName || !payload.email || !payload.location) {

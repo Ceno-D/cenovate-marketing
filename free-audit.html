@@ -131,6 +131,14 @@
       <h2 class="audit-form-title">Get Your Free Audit</h2>
 
       <form class="audit-form" id="audit-form-el" novalidate>
+        <!-- Honeypot: hidden from humans (off-screen, not tabbable, not announced).
+             Real users never fill it; spam bots that autofill every field do. A filled
+             value is silently dropped server-side. Do not remove. -->
+        <div class="hp-field" aria-hidden="true" style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;">
+          <label for="audit-company">Company website (leave this blank)</label>
+          <input type="text" id="audit-company" name="companyWebsite" tabindex="-1" autocomplete="off" />
+        </div>
+
         <div class="form-row">
           <div class="field">
             <label for="audit-name">Your Name *</label>
@@ -222,6 +230,6 @@
   </footer>
 
   <script src="js/main.js?v=8"></script>
-  <script src="js/free-audit.js?v=1"></script>
+  <script src="js/free-audit.js?v=2"></script>
 </body>
 </html>

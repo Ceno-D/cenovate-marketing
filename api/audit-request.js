@@ -49,6 +49,13 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'Invalid request body' });
   }
 
+  // Honeypot: a hidden form field ('companyWebsite') that real users never fill.
+  // If it has any value, the submitter is almost certainly a bot — silently accept
+  // (200) so it thinks it succeeded, but write nothing to Airtable and send no email.
+  if (String(body.companyWebsite || '').trim()) {
+    return res.status(200).json({ ok: true });
+  }
+
   const contactName = String(body.contactName || '').trim();
   const businessName = String(body.businessName || '').trim();
   const email = String(body.email || '').trim();
