@@ -839,13 +839,108 @@ figcaption,
   color: #ffffff;
 }
 
-/* --- Reel cards: 9:16, thumbnail by default, video plays on hover --- */
-.project-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+/* --- Reel cards: 9:16, thumbnail by default, video plays on hover ---
+   4 cards total, 3 "main" ones shown in the row at a time (desktop), the
+   4th (Mediquip) sits one card-width past the right edge and is reached via
+   the prev/next arrows below. Mobile stacks all 4 vertically, no carousel. */
+.project-cards-wrap {
+  position: relative;
   max-width: 1100px;
-  margin: 0 auto 64px;
+  margin: 0 auto;
+}
+
+.project-cards {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  margin: 0 auto;
+  /* Hide the scrollbar — the arrows/snap are the intended navigation,
+     a visible scrollbar under 9:16 cards reads as a layout glitch. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.project-cards::-webkit-scrollbar {
+  display: none;
+}
+
+.project-cards .project-card {
+  flex: 0 0 calc((100% - 40px) / 3); /* 3 cards + 2x 20px gap visible at once */
+  scroll-snap-align: start;
+}
+
+/* Prev/next arrows overlaid on the row, inside the wrap's own bounds so they
+   never risk clipping against .projects' overflow:hidden at narrower desktop
+   widths. Same translucent-circle treatment as the mute toggle elsewhere in
+   this section, for visual consistency. */
+.project-cards-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 5;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.project-cards-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+
+.project-cards-arrow:hover {
+  background: rgba(188, 208, 68, 0.85);
+  border-color: rgba(188, 208, 68, 0.85);
+  color: #000000;
+}
+
+.project-cards-arrow:focus-visible,
+.project-cards-more-link:focus-visible {
+  outline: 2px solid var(--color-green-bright);
+  outline-offset: 3px;
+}
+
+.project-cards-arrow[hidden] {
+  display: none;
+}
+
+.project-cards-arrow-prev {
+  left: 10px;
+}
+
+.project-cards-arrow-next {
+  right: 10px;
+}
+
+.project-cards-more {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  margin: 16px auto 64px;
+}
+
+.project-cards-more-link {
+  background: none;
+  border: none;
+  padding: 0 0 0 4px;
+  color: var(--color-green-bright);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.project-cards-more-link:hover {
+  text-decoration: underline;
 }
 
 .project-card {
@@ -1340,8 +1435,18 @@ figcaption,
 }
 
 @media (max-width: 900px) {
+  /* All 4 cards stack vertically and scroll with the page — no carousel
+     needed, the arrows/snap behavior is a desktop-row affordance only. */
   .project-cards {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    overflow-x: visible;
+  }
+  .project-cards .project-card {
+    flex: 1 1 auto;
+  }
+  .project-cards-arrow,
+  .project-cards-more {
+    display: none;
   }
   .sites-strip {
     grid-template-columns: 1fr;

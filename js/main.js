@@ -105,6 +105,70 @@ console.log('Cenovate Marketing site loaded.');
   });
 })();
 
+// ===================== Project reel carousel: prev/next arrows =====================
+// Desktop shows 3 of the 4 reel cards at once; the 4th (Mediquip) sits one
+// card-width past the right edge. These arrows (and the "More client work"
+// text link, same action as Next) scroll the row by exactly one card+gap so
+// it lands on a scroll-snap boundary rather than an arbitrary offset.
+(function () {
+  const track = document.getElementById('project-cards');
+  if (!track) return;
+
+  const prevBtn = document.querySelector('.project-cards-arrow-prev');
+  const nextBtn = document.querySelector('.project-cards-arrow-next');
+  const moreLink = document.querySelector('.project-cards-more-link');
+  // Respects prefers-reduced-motion is nice but this is also a correctness
+  // fix: `hidden` buttons mid-animation is where the focus-loss bug below
+  // actually gets triggered, so a jump-scroll for that audience sidesteps it.
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function cardStep() {
+    const firstCard = track.querySelector('.project-card');
+    if (!firstCard) return 0;
+    const style = window.getComputedStyle(track);
+    const gap = parseFloat(style.columnGap || style.gap || '0') || 0;
+    return firstCard.getBoundingClientRect().width + gap;
+  }
+
+  // Fallback focus target so keyboard users never silently land on <body>
+  // when the button they're on becomes hidden (see updateArrows below).
+  // tabindex="-1" keeps it out of normal Tab order, programmatic-focus only.
+  track.setAttribute('tabindex', '-1');
+
+  function updateArrows() {
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const prevShouldHide = track.scrollLeft <= 4;
+    const nextShouldHide = track.scrollLeft >= maxScroll - 4;
+
+    // If the arrow that's about to disappear currently holds keyboard focus,
+    // move focus somewhere real first — otherwise the browser drops it to
+    // <body> the instant `hidden` is set, which reads as broken keyboard nav.
+    if (prevBtn && prevShouldHide && document.activeElement === prevBtn) {
+      (nextBtn && !nextShouldHide ? nextBtn : moreLink || track).focus();
+    }
+    if (nextBtn && nextShouldHide && document.activeElement === nextBtn) {
+      (prevBtn && !prevShouldHide ? prevBtn : moreLink || track).focus();
+    }
+
+    if (prevBtn) prevBtn.hidden = prevShouldHide;
+    // Hide "next" once there's nothing meaningful left to reveal (a couple
+    // px of float/rounding slack rather than an exact 0 comparison).
+    if (nextBtn) nextBtn.hidden = nextShouldHide;
+  }
+
+  function scrollByCard(direction) {
+    track.scrollBy({ left: direction * cardStep(), behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  }
+
+  if (prevBtn) prevBtn.addEventListener('click', () => scrollByCard(-1));
+  if (nextBtn) nextBtn.addEventListener('click', () => scrollByCard(1));
+  if (moreLink) moreLink.addEventListener('click', () => scrollByCard(1));
+
+  track.addEventListener('scroll', updateArrows);
+  window.addEventListener('resize', updateArrows);
+  updateArrows();
+})();
+
 // ===================== Mission timeline: scroll-driven fill + active dots =====================
 // Line/dots start gray, then turn green as you scroll past each step —
 // matches the OC Digital Firm reference. No animation library needed, just
