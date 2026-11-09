@@ -1410,7 +1410,13 @@ figcaption,
   color: var(--color-text-muted);
 }
 
-.site-shot-foot .client-badge {
+/* "Current Client" badge. Shared verbatim by the sites-strip footers and the
+   reel-card overlays — one rule block so both contexts can't drift apart.
+   Both selectors stay context-qualified because each context has a generic
+   descendant rule (.site-shot span, .project-overlay typography) that would
+   otherwise out-specify a bare .client-badge. */
+.site-shot-foot .client-badge,
+.project-overlay .client-badge {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1425,13 +1431,25 @@ figcaption,
   white-space: nowrap;
 }
 
-.site-shot-foot .client-badge::before {
+.site-shot-foot .client-badge::before,
+.project-overlay .client-badge::before {
   content: "";
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: #4ade80;
   box-shadow: 0 0 6px rgba(74, 222, 128, 0.7);
+}
+
+/* In the reel overlay the badge sits on its own line under the client name,
+   above the Instagram pill, rather than inline opposite a site name. The
+   overlay is a plain block, so an inline-flex badge would share a line with
+   the inline-flex IG pill — flex + fit-content keeps it block-level and
+   shrink-wrapped to its text. */
+.project-overlay .client-badge {
+  display: flex;
+  width: fit-content;
+  margin-top: 7px;
 }
 
 @media (max-width: 900px) {
