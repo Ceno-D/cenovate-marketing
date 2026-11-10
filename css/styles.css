@@ -1135,11 +1135,20 @@ figcaption,
 /* --- Site screenshot strip --- */
 .sites-strip-label {
   text-align: center;
-  font-size: 12px;
+  /* Reads as a divider title between the reel cards and the site-screenshot
+     strip, not a small eyebrow sitting above its own headline like the
+     other .eyebrow labels on this page — sized up from the old 12px
+     eyebrow scale so it actually reads as a title. */
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-text-muted);
-  margin-bottom: 24px;
+  /* No margin-top here on purpose — on desktop, .project-cards-more's own
+     64px bottom margin already provides the gap above this label. Mobile
+     hides .project-cards-more entirely (see the max-width:900px query
+     below), which silently deletes that spacing too, so the mobile-only
+     gap is added back there instead of stacking on top of this. */
+  margin-bottom: 28px;
 }
 
 .sites-strip {
@@ -1468,6 +1477,14 @@ figcaption,
   }
   .sites-strip {
     grid-template-columns: 1fr;
+  }
+  /* Hiding .project-cards-more above also deletes the 64px bottom margin
+     that gave this label breathing room on desktop, which is why it was
+     sitting almost flush under the last reel card on mobile. Added back
+     here directly instead of stacking a base margin-top on top of
+     .project-cards-more's own margin on desktop. */
+  .sites-strip-label {
+    margin-top: 48px;
   }
 }
 
